@@ -39,7 +39,6 @@ export default function AddButton() {
         setUser(prev=>{
             return {...prev,[e.target.name]:e.target.value}
         })
-        
       console.log(user)
     }
     const handleClose = () => {

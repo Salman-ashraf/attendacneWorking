@@ -1,10 +1,10 @@
-import { Avatar, Button, ButtonGroup, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, Grid, IconButton, MenuItem, Modal, TextField, Tooltip, Typography } from '@mui/material'
-import React, { useState } from 'react'
-import AddIcon from '@mui/icons-material/Add';
-import { Box, Stack } from '@mui/system';
-
-
-
+import * as React from 'react';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import { MenuItem } from '@mui/material';
 const designations = [
     {
         value: 'Senior Web Developer',
@@ -24,45 +24,27 @@ const designations = [
     },
 ];
 
-
-export default function AddButton() {
-    const [user,setUser]=React.useState({fullname:'',email:'',designation:'',rid:''});
-
+export default function UserDetails() {
  
-    const [open, setOpen] = useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+    const [user,setUser]=React.useState({fullname:'',email:'',designation:'',rid:''});
 
     const handlechanges=(e)=>{
         setUser(prev=>{
             return {...prev,[e.target.name]:e.target.value}
         })
-        
       console.log(user)
     }
-    const handleClose = () => {
-        setOpen(false);
-    };
+
+
+    // const handleChange = (event) => {
+    //     setDesgination(event.target.value);
+    // };
+
 
     return (
+        <React.Fragment>
 
-        <>
-            <Tooltip title="Add" sx={{ position: 'fixed', top: {xs:'calc(80%)',md:90}, right: { xs: "calc(40%)", md: 30 } }}>
-          
-                    <Fab color="primary" aria-label="add" onClick={() => setOpen(true)}>
-                        <AddIcon />
-                    </Fab>
-           
-            </Tooltip>
-
-            <Dialog open={open} onClose={handleClose} fullWidth={true}>
-                <DialogTitle>User Details</DialogTitle>
-                <Container>
-                
-            
-                <Grid container spacing={3}>
+            <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <TextField
                         required
@@ -128,16 +110,6 @@ export default function AddButton() {
 
                 </Grid>
             </Grid>
-
-
-                <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button  onClick={handleClose}>Create</Button>
-                    </DialogActions>
-                </Container>
-          
-            </Dialog>
-
-        </>
-    )
+        </React.Fragment>
+    );
 }

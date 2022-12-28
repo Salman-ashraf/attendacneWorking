@@ -4,51 +4,54 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import GroupsIcon from '@mui/icons-material/Groups';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
-import { Link } from "react-router-dom";
-import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth';
+import { Link, NavLink } from "react-router-dom";
+import DateRangeIcon from '@mui/icons-material/DateRange';
 export const mainListItems = (
-  <React.Fragment>
+  <>
 
-    <ListItemButton to="/signin">
-  
-      <ListItemIcon>
+
+    <ListItemButton component={NavLink} to="employee">
+
+      <ListItemIcon >
         <GroupsIcon />
 
 
       </ListItemIcon>
-  
-      <ListItemText primary="Employees" />
-    
+      <ListItemText sx={{color:'black',textDecoration:'none'}} primary="Employees" />
+   
     </ListItemButton>
 
 
 
-
-    <ListItemButton>
+  
+    <ListItemButton component={NavLink} to="attandance">
+   
       <ListItemIcon>
         <FingerprintIcon />
       </ListItemIcon>
+     
       <ListItemText primary="Attandance" />
-      
+  
+    </ListItemButton>
+
+
+    
+    <ListItemButton component={NavLink} to="attandancebyrange">
+   
+      <ListItemIcon>
+        <DateRangeIcon />
+      </ListItemIcon>
+     
+      <ListItemText primary="AttandanceByRange" />
+  
     </ListItemButton>
 
 
 
-    <ListItemButton to="/bydate">
-  
-  <ListItemIcon>
- 
-
-<CalendarViewMonthIcon/>
-  </ListItemIcon>
-
-  <ListItemText primary="Attandance-By-Date" />
-
-</ListItemButton>
 
 
    
-  </React.Fragment>
+  </>
 );
 
 

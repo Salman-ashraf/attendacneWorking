@@ -9,29 +9,30 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, } from './listItems';
-import Attandance from './Attandance';
 import AddButton from './AddButton';
-import { Avatar } from '@mui/material';
+import { Avatar, TextField } from '@mui/material';
+import { Outlet } from 'react-router-dom';
+import MyTable from './SubComponents/MyTable';
+import { Dayjs } from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import MyTableByDate from './SubComponents/MyTableByDate';
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-    {'Copyright © '}
-    <Link color="inherit" href="https://technologyrivers.com">
-    Technology-Rivers
-    </Link>{' '}
-    {new Date().getFullYear()}
-    {'.'}
-  </Typography>
+      {'Copyright © '}
+      <Link color="inherit" href="https://technologyrivers.com">
+        Technology-Rivers
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
   );
 }
 
@@ -89,14 +90,45 @@ function DashboardContent() {
     setOpen(!open);
   };
 
+  const [value, setValue] = React.useState(function getPreviousDay(date = new Date()) {
+    const previous = new Date(date.getTime());
+    previous.setDate(date.getDate() - 1);
+  
+    return previous;
+  });
+
+ const handeldatechange=(newValue)=>{
+  
+  console.log(value)
+    setValue(newValue.$d);
+
+
+    //isoformat to local 
+    // const birthday2 = new Date("2022-12-05T11:24:00"); 
+
+    // console.log(birthday2)
+
+    //local format to iso
+
+    // console.log(birthday2.toISOString())
+
+
+
+  }
+  
+  // console.log(getPreviousDay());
+
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
+
+        {/* Main Navbar */}
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
-              pr: '24px', backgroundColor:'#ffffff'// keep right padding when drawer closed
+              pr: '24px', backgroundColor: '#ffffff'// keep right padding when drawer closed
             }}
           >
             <IconButton
@@ -112,23 +144,27 @@ function DashboardContent() {
               <MenuIcon color='primary' />
             </IconButton>
             <Typography
-             
-            
-            
+
+
+
               noWrap
               sx={{ flexGrow: 1 }}
-              
+
             >
-      <a href=''>   <img width="100" height="50" src="https://technologyrivers.com/wp-content/uploads/2019/04/technology-rivers.png" className="attachment-full size-full entered lazyloaded" alt="" data-lazy-src="https://technologyrivers.com/wp-content/uploads/2019/04/technology-rivers.png" data-ll-status="loaded"/>
-      </a>
+              <a href=''>   <img width="100" height="50" src="https://technologyrivers.com/wp-content/uploads/2019/04/technology-rivers.png" className="attachment-full size-full entered lazyloaded" alt="" data-lazy-src="https://technologyrivers.com/wp-content/uploads/2019/04/technology-rivers.png" data-ll-status="loaded" />
+              </a>
             </Typography>
             <IconButton color="inherit">
- 
+
               <Avatar alt="Remy Sharp" src="https://i.ibb.co/7rGgWws/Img1.jpg" />
-    
+
             </IconButton>
           </Toolbar>
         </AppBar>
+
+
+        {/* side bar  */}
+
         <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
@@ -146,9 +182,13 @@ function DashboardContent() {
           <List component="nav">
             {mainListItems}
             <Divider sx={{ my: 1 }} />
-         
+
           </List>
         </Drawer>
+        
+        {/* sidebar end  */}
+
+
         <Box
           component="main"
           sx={{
@@ -162,26 +202,46 @@ function DashboardContent() {
           }}
         >
           <Toolbar />
+
+
+          {/* this is main page which is showing productive hours for yesterday Attandance */}
+
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              {/* Chart */}
-            
-              {/* Recent Deposits */}
-            
-              {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Attandance />
-                </Paper>
-              </Grid>
-            </Grid>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
 
+<DatePicker
+  label="Select a Date"
+  value={value}
+  onChange={handeldatechange}
 
-            <Copyright sx={{ pt: 4 }} />
+  renderInput={(params) => <TextField {...params} />}
+/>
+</LocalizationProvider>
+
           </Container>
+      
+
+
+          <MyTable  date={value}/>
+         <MyTableByDate/>
+
+          <Copyright sx={{ pt: 4 }} />
+
+
+
         </Box>
-        <AddButton/>
+
+
+
+
+
+        <AddButton />
+        
       </Box>
+
+
+
+
     </ThemeProvider>
   );
 }
