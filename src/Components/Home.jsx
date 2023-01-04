@@ -14,8 +14,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "./listItems";
 import { Avatar, Menu, MenuItem, TextField } from "@mui/material";
-import Attandance from "./Attandance";
 import { Outlet } from "react-router-dom";
+import Attandance from "../features/attandance/Attandance";
 
 function Copyright(props) {
   return (

@@ -1,5 +1,5 @@
-{
-  "data": [
+export const databydate = {
+  data: [
     {
       "id": 22,
       "attendanceTime": "2022-12-21T06:05:06.000Z",

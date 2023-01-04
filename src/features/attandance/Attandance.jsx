@@ -2,14 +2,13 @@ import { Container, TextField } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import React from 'react'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import AttandanceTable from './SubComponents/AttandanceTable';
+import AttandanceTable from './AttandanceTable';
+import { subDays } from 'date-fns';
+
+
 export default function Attandance() {
-    const [value, setValue] = React.useState(function getPreviousDay(date = new Date()) {
-        const previous = new Date(date.getTime());
-        previous.setDate(date.getDate() - 1);
-      
-        return previous;
-      });
+    const [value, setValue] = React.useState(subDays(new Date(),1))
+
     
      const handeldatechange=(newValue)=>{
       
@@ -31,6 +30,7 @@ export default function Attandance() {
           </Container>
 
           <AttandanceTable  date={value}/>
+      
 
 </>
   )

@@ -1,7 +1,8 @@
-import { Avatar, Button, ButtonGroup, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, Grid, IconButton, MenuItem, Modal, TextField, Tooltip, Typography } from '@mui/material'
-import React, { useState } from 'react'
-import AddIcon from '@mui/icons-material/Add';
-import { Box, Stack } from '@mui/system';
+import {  Button, Container, Dialog, DialogActions, DialogTitle,  Grid, IconButton, MenuItem,  TextField, Tooltip} from '@mui/material'
+import React, { useState,useEffect } from 'react'
+import EditIcon from '@mui/icons-material/Edit';
+import { useDispatch } from 'react-redux';
+import { updateEmployee } from './employeeSlice';
 
 
 
@@ -25,12 +26,19 @@ const designations = [
 ];
 
 
-export default function AddButton() {
-    const [user,setUser]=React.useState({fullname:'',email:'',designation:'',rid:''});
+export default function EditUser(props) {
+    const [user,setUser]=React.useState({fullname:'',email:'',designation:''});
 
- 
+
     const [open, setOpen] = useState(false);
-
+     useEffect(() => {
+      setUser({
+        fullname:props.data.name,
+        email:props.data.email,
+        designation:props.data.designation
+      })
+     }, [])
+     
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -39,21 +47,33 @@ export default function AddButton() {
         setUser(prev=>{
             return {...prev,[e.target.name]:e.target.value}
         })
-        
-      console.log(user)
+
     }
     const handleClose = () => {
         setOpen(false);
     };
-
+   const dispatch=useDispatch();
+    const handleUpdate=()=>{
+        dispatch(
+            updateEmployee({
+              name: user.fullname,
+              designation: user.designation,
+              email: user.email,
+              id:Number(props.data.id)
+            },props.data.id)
+          );
+          setUser({ fullname: " ", email: " ", designation: " " });
+          setOpen(false);
+        };
+    
     return (
 
         <>
-            <Tooltip title="Add" sx={{ position: 'fixed', top: {xs:'calc(80%)',md:90}, right: { xs: "calc(40%)", md: 30 } }}>
+            <Tooltip title="Edit" >
           
-                    <Fab color="primary" aria-label="add" onClick={() => setOpen(true)}>
-                        <AddIcon />
-                    </Fab>
+                    <IconButton color="primary" aria-label="edit" onClick={() => setOpen(true)}>
+                        <EditIcon />
+                    </IconButton>
            
             </Tooltip>
 
@@ -82,6 +102,7 @@ export default function AddButton() {
                         required
                         id="email"
                         name="email"
+                        type='email'
                         label="Email"
                         fullWidth
                         autoComplete="given-email"
@@ -111,19 +132,7 @@ export default function AddButton() {
                 </Grid>
 
 
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="rid"
-                        name="rid"
-                        label="Registration-Id"
-                        fullWidth
-                        autoComplete="given-rid"
-                        variant="standard"
-                        onChange={handlechanges}
-                        value={user.rid}
-                    />
-                </Grid>
+
                 <Grid item xs={12}>
 
                 </Grid>
@@ -132,7 +141,7 @@ export default function AddButton() {
 
                 <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
-                        <Button  onClick={handleClose}>Create</Button>
+                        <Button  onClick={handleUpdate}>Update</Button>
                     </DialogActions>
                 </Container>
           

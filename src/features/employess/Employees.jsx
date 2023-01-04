@@ -1,14 +1,21 @@
 import { Container, Grid, IconButton, Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import React from 'react'
 import AddButton from './AddButton';
-import Title from './Title';
-import employeedata from './SubComponents/Employeedata';
+
+
+
+import Title from '../attandance/Title';
 
 import EditUser from './EditUser';
+import { useSelector } from 'react-redux';
+import {  selectEmployeeIds } from './employeeSlice';
+import EmployeRow from './EmployeRow';
 
-const rows = employeedata.data;
+
 
 export default function Employees() {
+
+  const employess=useSelector(selectEmployeeIds)
 
   return (
   <>
@@ -37,18 +44,14 @@ export default function Employees() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.deviceId}>
-              <TableCell>{row.deviceId}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.email}</TableCell>
-              <TableCell>{row.designation}</TableCell>
-              <TableCell>{new Date(row.createdAt.slice(0,-1)).toLocaleDateString()}
 
-<EditUser data={row}/>
-              </TableCell>
-          
-            </TableRow>
+          {employess.map((item) => (
+           
+           <EmployeRow id={item} key={item}/>
+      
+
+
+
           ))}
         </TableBody>
       </Table>

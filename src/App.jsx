@@ -1,67 +1,42 @@
+import SignIn from "./Components/SignIn";
+import { Box } from "@mui/material";
 
-import SignIn from './Components/SignIn'
-import { Box } from '@mui/material'
+import { Routes, Route } from "react-router-dom";
+import Home from "./Components/Home";
 
-import {
-  Routes,
-  Route,
-} from "react-router-dom";
-import Home from './Components/Home';
-import Attandance from './Components/Attandance';
-import Employees from './Components/Employees';
-import  './styles.css'
-import NoFound from './NoFound';
-import { AttandanceByRange } from './Components/AttandanceByRange';
-// import {databydate} from './Components/ByDate.js'
+
+import "./styles.css";
+import NoFound from "./NoFound";
+
+import Attandance from "./features/attandance/Attandance";
+import { AttandanceByRange } from "./features/attandance/AttandanceByRange";
+import Employees from "./features/employess/Employees";
 
 function App() {
-
-
   return (
+    <Box>
+      {/* {console.log(databydate.data[0])} */}
 
+      <Routes>
+        <Route path="/" element={<Home />}>
+          <Route index element={<Attandance />} />
 
- <Box>
+          <Route path="employee" element={<Employees />} />
 
-  {/* {console.log(databydate.data[0])} */}
+          <Route path="attandance" element={<Attandance />} />
 
-  <Routes>
-  <Route path="/" element={<Home />}>
-   
-   <Route
-       index
-      element={<Attandance />}
-    />
+          <Route path="attandancebyrange" element={<AttandanceByRange />} />
+        </Route>
 
-    <Route
-      path="employee"
-      element={<Employees />}
-    />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="*" element={<NoFound />} />
+      </Routes>
 
-<Route
-      path="attandance"
-      element={<Attandance />}
-    />
+      {/* <DashBoard/> */}
 
-<Route
-      path="attandancebyrange"
-      element={<AttandanceByRange />}
-    />
-   
-  </Route>
-
-        <Route path="/signin" element={<SignIn/>} />
-        <Route path='*' element={<NoFound/>}/>
- 
-    </Routes>
-
-
-{/* <DashBoard/> */}
-
- {/* <SignIn/> */}
-
- </Box>
-
-  )
+      {/* <SignIn/> */}
+    </Box>
+  );
 }
 
-export default App
+export default App;

@@ -1,17 +1,20 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import {
-  BrowserRouter,
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./app/store";
+// import { fetchAllAttandanceOfDate } from "./features/attandance/attandaceSlice";
+import { fetchAllEmployees } from "./features/employess/employeeSlice";
 
-} from "react-router-dom";
+ store.dispatch(fetchAllEmployees())
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  
-  <BrowserRouter>
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </BrowserRouter>
   </React.StrictMode>
-  </BrowserRouter>
-  
-)
+);
