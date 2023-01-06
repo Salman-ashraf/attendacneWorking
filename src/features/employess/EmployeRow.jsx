@@ -10,16 +10,21 @@ const EmployeRow = ({id}) => {
 
   return (
  <>
-      <TableRow>
+      <TableRow hover>
+
               <TableCell>{employee.deviceId}</TableCell>
               <TableCell>{employee.name}</TableCell>
               <TableCell>{employee.email}</TableCell>
               <TableCell>{employee.designation}</TableCell>
-              <TableCell>{new Date(employee.createdAt).toLocaleDateString()}
+              <TableCell>{new Date(employee.createdAt).toLocaleDateString()}     </TableCell>
+            
+              <TableCell>
 
-           <EditUser data={employee}/>
-          
+              <EditUser data={employee}/>
               </TableCell>
+    
+          
+         
             </TableRow>
  
  </>

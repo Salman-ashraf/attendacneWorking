@@ -29,7 +29,8 @@ export default function DialogContents(props) {
       <DialogTitle>
         Biometric Time of {props.name} on{" "}
         {new Date(
-          props.biometricTime[0].attendanceTime).toLocaleDateString()}
+          props.biometricTime[0].attendanceTime
+          ).toLocaleDateString()}
       </DialogTitle>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <TableContainer component={Paper}>

@@ -7,7 +7,7 @@ import DetailsIcon from '@mui/icons-material/Details';
 export default function SimpleDialogue(props) {
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(null);
-  
+
   const handleClickOpen = () => {
     setOpen(true);
   };

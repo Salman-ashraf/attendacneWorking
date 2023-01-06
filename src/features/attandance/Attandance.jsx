@@ -2,8 +2,9 @@ import { Container, TextField } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import React from 'react'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import AttandanceTable from './AttandanceTable';
 import { subDays } from 'date-fns';
+
+import AttendanceTable from './AttendanceTable';
 
 
 export default function Attandance() {
@@ -29,9 +30,9 @@ export default function Attandance() {
 </LocalizationProvider>
           </Container>
 
-          <AttandanceTable  date={value}/>
+          {/* <AttandanceTable  date={value}/> */}
       
-
+       <AttendanceTable date={value}/>
 </>
   )
 }

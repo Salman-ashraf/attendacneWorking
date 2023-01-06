@@ -18,7 +18,7 @@ export const fetchAllAttandanceOfDate = createAsyncThunk(
           "x-access-token":
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiYWthckB0ZWNocml2ZXJzLmNvbSIsImlhdCI6MTY3MjgxMjIzMywiZXhwIjoxNjczNDE3MDMzfQ.wCX6OXq4xHYxXVnDMCE0_m1AHOuhH51BWkwyO9SFnh8"  },
       });
-     console.log(res);
+    //  console.log(res);
       return [...res.data.data];
     } catch (error) {
       console.log("error occured in fetchAllAttandanceOfDate ");
