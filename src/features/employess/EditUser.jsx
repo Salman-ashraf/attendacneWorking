@@ -3,6 +3,7 @@ import React, { useState,useEffect } from 'react'
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch } from 'react-redux';
 import { updateEmployee } from './employeeSlice';
+import EditUserFields from './EditUserFields';
 
 
 
@@ -78,72 +79,9 @@ export default function EditUser(props) {
             </Tooltip>
 
             <Dialog open={open} onClose={handleClose} fullWidth={true}>
-                <DialogTitle>User Details</DialogTitle>
-                <Container>
-                
-            
-                <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="fullname"
-                        name="fullname"
-                        label="Full name"
-                        fullWidth
-                        autoComplete="given-fullname"
-                        variant="standard"
-                        onChange={handlechanges}
-                        value={user.fullname}
-                    />
-                </Grid>
-
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="email"
-                        name="email"
-                        type='email'
-                        label="Email"
-                        fullWidth
-                        autoComplete="given-email"
-                        variant="standard"
-                        onChange={handlechanges}
-                        value={user.email}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        id="designation"
-                        name="designation"
-                        select
-                        label="Designation"
-                        fullWidth
-                        helperText="Please select  designation"
-                        variant="standard"
-                        onChange={handlechanges}
-                        value={user.designation}
-                    >
-                        {designations.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                </Grid>
-
-
-
-                <Grid item xs={12}>
-
-                </Grid>
-            </Grid>
-
-
-                <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button  onClick={handleUpdate}>Update</Button>
-                    </DialogActions>
-                </Container>
+            <DialogTitle color="primary">Employee Details</DialogTitle>
+              
+              <EditUserFields setOpen={setOpen} props={props}/>
           
             </Dialog>
 

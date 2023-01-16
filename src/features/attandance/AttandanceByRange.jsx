@@ -98,7 +98,9 @@ export const AttandanceByRange = () => {
       attendances.map((v) => [new Date(v.attendanceTime).toDateString(), v])
     ).values(),
   ];
-
+  uniqueDates.sort((a, b) => {
+    return new Date(a.attendanceTime) - new Date(b.attendanceTime);
+  });
   const allAttendeces = [];
 
   for (let e = 0; e < employeeAttendance.length; e++) {

@@ -1,17 +1,17 @@
 import * as React from 'react';
 import {
-  Avatar,
   Button, CssBaseline,
-  TextField, FormControlLabel,
-  Checkbox, Link
-  , Grid, Box, Typography, Container
+  TextField, 
+  Link
+  , Grid, Box, Typography, Container, Stack
 } from '@mui/material';
-import FingerprintIcon from '@mui/icons-material/Fingerprint';
+
 import { useState } from 'react'
 
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Stack } from '@mui/system';
+import { AuthLogin } from './AuthLogin';
+
 
 
 function Copyright(props) {
@@ -76,60 +76,8 @@ export default function SignIn() {
         </Box>
 
 
-       
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-           
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={handlechange} 
-              value={usercredentials.email}  
-             
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={handlechange} 
-              value={usercredentials.password} 
-            
-           
-            />
-
-       
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
+       <AuthLogin/>
+   
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>

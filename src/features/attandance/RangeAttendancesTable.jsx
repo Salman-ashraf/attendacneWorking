@@ -45,7 +45,7 @@ function stableSort(array, comparator) {
 
 export default function RangeAttendancesTable({ days, attendances }) {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("employeeId");
+  const [orderBy, setOrderBy] = React.useState("deviceId");
   const employees = useSelector(selectAllEmployees);
   const attendanceStatus = useSelector(getStatus);
 
@@ -54,7 +54,7 @@ export default function RangeAttendancesTable({ days, attendances }) {
   });
 
   columns.unshift({ id: "Employeename", label: "Name" });
-  columns.unshift({ id: "employeeId", label: "NO." });
+  columns.unshift({ id: "deviceId", label: "DeviceId" });
   columns.push({ id: "working_hours", label: "Total Hours" });
   //  const columns = [
 
@@ -67,9 +67,13 @@ export default function RangeAttendancesTable({ days, attendances }) {
     item.employeeName = employees.find(
       (emp) => emp.id === item.employeeId
     ).name;
+    item.deviceId = employees.find(
+      (emp) => emp.id === item.employeeId
+    ).deviceId;
     return item;
   });
-  console.log(attendances2);
+  
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -78,22 +82,14 @@ export default function RangeAttendancesTable({ days, attendances }) {
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
-
+  console.log(attendanceStatus);
   return (
     <>
-      {attendanceStatus == "pending" ? (
-        <h2>Loading....</h2>
-      ) : (
-        <Container sx={{ mt: 4, mb: 4 }}>
-          <Paper
-            sx={{
-              zIndex: -1,
-              width: "110%",
-              boxShadow:
-                "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-            }}
-          >
-            <TableContainer sx={{ maxHeight: 560}}>
+
+        <Container  sx={{ mb: 4,    boxShadow:
+          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", }}>
+        <Paper sx={{ width: '100%', overflow: 'hidden', }}>
+         <TableContainer sx={{ maxHeight: 560 }}>
               <Table aria-label="sticky table">
                 <EnhancedTableHead
                   headCells={columns}
@@ -103,7 +99,17 @@ export default function RangeAttendancesTable({ days, attendances }) {
                   rowCount={attendances2.length}
                 />
 
+
                 <TableBody>
+
+                {attendanceStatus == "pending" ?  (
+           <TableRow>
+           <TableCell><h2> Loading</h2> </TableCell>
+         </TableRow>
+      ) :  attendanceStatus=='rejected' ? (          <TableRow>
+        <TableCell><h2>No Result Found</h2></TableCell>
+      </TableRow>): (
+        <>
                   {stableSort(attendances2, getComparator(order, orderBy)).map(
                     (row, index) => {
                       return (
@@ -111,9 +117,9 @@ export default function RangeAttendancesTable({ days, attendances }) {
                           hover
                           role="checkbox"
                           tabIndex={-1}
-                          key={row.employeeId}
+                          key={row.deviceId}
                         >
-                          <TableCell> {row.employeeId} </TableCell>
+                          <TableCell> {row.deviceId} </TableCell>
                           <TableCell> {row.employeeName} </TableCell>
                           {row.dayHours.map((column, index) => {
                             return (
@@ -145,12 +151,12 @@ export default function RangeAttendancesTable({ days, attendances }) {
                       );
                     }
                   )}
-                </TableBody>
+              </>  )}</TableBody>
               </Table>
             </TableContainer>
           </Paper>
         </Container>
-      )}
+
     </>
   );
 }

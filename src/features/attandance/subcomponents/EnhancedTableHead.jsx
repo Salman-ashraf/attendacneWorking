@@ -22,7 +22,7 @@ export default function EnhancedTableHead(props) {
                   : "left"
               }
             > 
-            {headCell.id=='working_hours' || headCell.id=='employeeId' ?
+            {headCell.id=='working_hours' || headCell.id=='deviceId' ?
               <TableSortLabel
                 active={orderBy === headCell.id}
                 direction={orderBy === headCell.id ? order : "asc"}

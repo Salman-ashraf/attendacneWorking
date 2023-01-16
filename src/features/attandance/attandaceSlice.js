@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import axiosAuth from '../../api/axiosAuth'
 const URL = "http://localhost:3000";
 
 const initialState = {
@@ -12,38 +13,37 @@ export const fetchAllAttandanceOfDate = createAsyncThunk(
   "attandace/fetchAllAttandanceOfDate",
   async ({ date }) => {
     try {
-      const res = await axios.get(`${URL}/attendances/employees/`, {
+      const res = await axiosAuth.get(`/attendances/employees/`, {
         params: { date },
-        headers: {
-          "x-access-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiYWthckB0ZWNocml2ZXJzLmNvbSIsImlhdCI6MTY3MjgxMjIzMywiZXhwIjoxNjczNDE3MDMzfQ.wCX6OXq4xHYxXVnDMCE0_m1AHOuhH51BWkwyO9SFnh8"  },
-      });
+ });
     //  console.log(res);
       return [...res.data.data];
     } catch (error) {
+
       console.log("error occured in fetchAllAttandanceOfDate ");
       console.log(error);
+      throw(error)
       return (error);
     }
   }
 );
 
+
 export const fetchAllAttandanceBetweenDate = createAsyncThunk(
   "attandace/fetchAllAttandanceBetweenDate",
   async ({ fromDate, toDate }) => {
+
+    
     try {
-      const res = await axios.get(`${URL}/employees/reports/`, {
+      const res = await axiosAuth.get(`/employees/reports/`, {
         params: { fromDate, toDate },
-        headers: {
-          "x-access-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFiYWthckB0ZWNocml2ZXJzLmNvbSIsImlhdCI6MTY3MjgxMjIzMywiZXhwIjoxNjczNDE3MDMzfQ.wCX6OXq4xHYxXVnDMCE0_m1AHOuhH51BWkwyO9SFnh8"   },
-      });
+  });
       //console.log(res.data.data);
       return [...res.data.data];
     } catch (error) {
       console.log("error occured in  fetchAllAttandanceBetweenDate");
       console.log(error);
-      return error;
+      throw error;
     }
   }
 );
@@ -65,9 +65,22 @@ const attandanceSlice = createSlice({
         state.error = action.payload;
       }),
       builder.addCase(
+        fetchAllAttandanceBetweenDate.pending,
+        (state) => {
+          state.status = "pending";
+        }
+      ),
+      builder.addCase(
+        fetchAllAttandanceBetweenDate.rejected,
+        (state) => {
+          state.status = "rejected";
+        }
+      );
+
+      builder.addCase(
         fetchAllAttandanceBetweenDate.fulfilled,
         (state, action) => {
-        //  state.status = "fulfilled";
+          state.status = "fulfilled";
           state.attandance = [...action.payload];
         }
       );

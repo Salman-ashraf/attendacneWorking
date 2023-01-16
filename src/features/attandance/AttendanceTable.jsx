@@ -47,19 +47,22 @@ function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
+
+
 export default function AttendanceTable({ date }) {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("employeeId");
+  const [orderBy, setOrderBy] = React.useState("deviceId");
   const employees = useSelector(selectAllEmployees);
   const attendanceData = useSelector(selectAllAttandance);
   const attendanceStatus = useSelector(getStatus);
 
+  
   const headCells = [
     {
-      id: "employeeId",
+      id: "deviceId",
       numeric: true,
       disablePadding: true,
-      label: "No.",
+      label: "DeviceId",
     },
     {
       id: "name",
@@ -126,13 +129,12 @@ export default function AttendanceTable({ date }) {
   };
   const attandanceRows = employees.map((item) => {
     return {
-      employeeId: item.id,
+      deviceId: item.deviceId,
       name: item.name,
       working_hours: get_productive_hours(get_Allattandance(item.id)),
       biometricTime: get_Allattandance(item.id),
     };
   });
-  console.log(attandanceRows);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -144,74 +146,93 @@ export default function AttendanceTable({ date }) {
 
   return (
     <>
-      {attendanceStatus == "pending" ? (
-        <h2>Loading....</h2>
-      ) : (
-        <Container maxWidth="lg" sx={{ mt: 10, mb: 4,    boxShadow:
-          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)", }}>
-          <Box sx={{ width: "100%" }}>
-            <Paper sx={{ p: 2, width: "100%", mb: 4,mt:4 }}>
+      <Container
+        maxWidth="lg"
+        sx={{
+          mt: 10,
+          mb: 4,
+          boxShadow:
+            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        }}
+      >
+        <Box sx={{ width: "100%" }}>
+          <Paper sx={{ p: 2 }}>
             <Title>Attendance of {new Date(date).toDateString()} </Title>
-              <TableContainer>
-                <Table aria-labelledby="tableTitle" size={"small"}>
-                  <EnhancedTableHead
-                    headCells={headCells}
-                    order={order}
-                    orderBy={orderBy}
-                    onRequestSort={handleRequestSort}
-                    rowCount={attandanceRows.length}
-                  />
+            <TableContainer sx={{ maxHeight: 560 }}>
+              <Table aria-labelledby="tableTitle" size={"small"}>
+                <EnhancedTableHead
+                  headCells={headCells}
+                  order={order}
+                  orderBy={orderBy}
+                  onRequestSort={handleRequestSort}
+                  rowCount={attandanceRows.length}
+                />
 
-                  <TableBody>
-                    {stableSort(
-                      attandanceRows,
-                      getComparator(order, orderBy)
-                    ).map((row, index) => {
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={row.name}
-                        >
-                          <TableCell>{row.employeeId}</TableCell>
-
-                          <TableCell
-                            align="center"
-                            component="th"
-                            scope="row"
-                            padding="none"
+                <TableBody>
+                  {attendanceStatus == "pending" ? (
+                    <TableRow>
+                      <TableCell>
+                        <h2> Loading</h2>{" "}
+                      </TableCell>
+                    </TableRow>
+                  ) : attendanceStatus == "rejected" ? (
+                    <TableRow>
+                      <TableCell>
+                        <h2>No Result Found</h2>
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    <>
+                      {stableSort(
+                        attandanceRows,
+                        getComparator(order, orderBy)
+                      ).map((row, index) => {
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
+                            tabIndex={-1}
+                            key={row.name}
                           >
-                            {row.name}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.working_hours
-                              ? `${row.working_hours} Hours`
-                              : isNaN(row.working_hours)
-                              ? "TBD Hours"
-                              : " "}
-                            {row.biometricTime ? (
-                              <SimpleDialogue
-                                //sending props as array of all checkin and chechkout
-                                biometricTime={row.biometricTime}
-                                name={row.name}
-                              />
-                            ) : (
-                              <p>
-                                <b>Absent</b>
-                              </p>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Paper>
-          </Box>{" "}
-        </Container>
-      )}
+                            <TableCell>{row.deviceId}</TableCell>
+
+                            <TableCell
+                              align="center"
+                              component="th"
+                              scope="row"
+                              padding="none"
+                            >
+                              {row.name}
+                            </TableCell>
+                            <TableCell align="right">
+                              {row.working_hours
+                                ? `${row.working_hours} Hours`
+                                : isNaN(row.working_hours)
+                                ? "TBD Hours"
+                                : " "}
+                              {row.biometricTime ? (
+                                <SimpleDialogue
+                                  //sending props as array of all checkin and chechkout
+                                  biometricTime={row.biometricTime}
+                                  name={row.name}
+                                />
+                              ) : (
+                                <p>
+                                  <b>Absent</b>
+                                </p>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        </Box>{" "}
+      </Container>
     </>
   );
 }

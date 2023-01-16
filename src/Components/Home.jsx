@@ -14,8 +14,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "./listItems";
 import { Avatar, Menu, MenuItem, TextField } from "@mui/material";
-import { Outlet } from "react-router-dom";
-import Attandance from "../features/attandance/Attandance";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -86,7 +85,13 @@ const mdTheme = createTheme();
 export default function Home() {
   const [open, setOpen] = React.useState(true);
 
+  const navigate=useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleLogOut=()=>{
+    console.log('logout')
+   localStorage.removeItem('accessToken');
+   navigate('/signin', { replace: true });
+  }
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -104,7 +109,7 @@ export default function Home() {
 
       {/* Main Navbar */}
 
-      {/* <AppBar position="absolute" open={open}>
+      <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
               pr: '24px', backgroundColor: '#ffffff'// keep right padding when drawer closed
@@ -147,12 +152,12 @@ export default function Home() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                <MenuItem onClick={handleLogOut}>Logout</MenuItem>
               
               </Menu>
 
           </Toolbar>
-        </AppBar> */}
+        </AppBar>
 
       {/* side bar  */}
 
