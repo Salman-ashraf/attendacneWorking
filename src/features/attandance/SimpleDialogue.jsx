@@ -1,8 +1,7 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import DialogContents from './DialogContents';
-import DetailsIcon from '@mui/icons-material/Details';
-
+import * as React from "react";
+import Button from "@mui/material/Button";
+import DialogContents from "./DialogContents";
+import DetailsIcon from "@mui/icons-material/Details";
 
 export default function SimpleDialogue(props) {
   const [open, setOpen] = React.useState(false);
@@ -11,7 +10,6 @@ export default function SimpleDialogue(props) {
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = (value) => {
     setOpen(false);
     setSelectedValue(value);
@@ -20,11 +18,8 @@ export default function SimpleDialogue(props) {
   return (
     <div>
       <Button onClick={handleClickOpen}>
-  
-                <DetailsIcon fontSize="medium" />
-         
+        <DetailsIcon fontSize="medium" />
       </Button>
-
       <DialogContents
         biometricTime={props.biometricTime}
         name={props.name}
@@ -32,8 +27,6 @@ export default function SimpleDialogue(props) {
         open={open}
         onClose={handleClose}
       />
-
-
     </div>
   );
 }

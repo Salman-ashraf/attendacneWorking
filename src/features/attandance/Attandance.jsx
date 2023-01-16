@@ -3,10 +3,10 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import React from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { subDays } from "date-fns";
-
 import AttendanceTable from "./AttendanceTable";
 
 export default function Attandance() {
+  //no function in usestate
   const [value, setValue] = React.useState(
     subDays(
       new Date().getDay() == 1 ? new Date(subDays(new Date(), 2)) : new Date(),
@@ -14,9 +14,10 @@ export default function Attandance() {
     )
   );
 
-  const handeldatechange = (newValue) => {
+  const handleDateChange = (newValue) => {
     setValue(newValue.$d);
   };
+  
 
   return (
     <>
@@ -25,14 +26,11 @@ export default function Attandance() {
           <DatePicker
             label="Select a Date"
             value={value}
-            onChange={handeldatechange}
+            onChange={handleDateChange}
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
       </Container>
-
-      {/* <AttandanceTable  date={value}/> */}
-
       <AttendanceTable date={value} />
     </>
   );

@@ -16,87 +16,16 @@ import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { addNewEmployee } from "./employeeSlice";
-const alldesgination = [
-  {
-    id: 1,
-    label: "CEO",
-  },
-  {
-    id: 2,
-    label: "Head of HR & Ops",
-  },
-  {
-    id: 3,
-    label: "Director Software Development",
-  },
-  {
-    id: 4,
-    label: "Product Development Manager",
-  },
-  {
-    id: 5,
-    label: "Project Coordinater",
-  },
-  {
-    id: 6,
-    label: "Mobile Lead",
-  },
-  {
-    id: 7,
-    label: "UI/UX Desinger",
-  },
-  {
-    id: 8,
-    label: "Full Stack Engineer",
-  },
-  {
-    id: 9,
-    label: "React Native Engineer",
-  },
-  {
-    id: 10,
-    label: "Software Engineer",
-  },
-  {
-    id: 11,
-    label: "Front End Engineer",
-  },
-  {
-    id: 12,
-    label: "Project Manager",
-  },
-  {
-    id: 13,
-    label: "Quality Assurance Engineer",
-  },
-  {
-    id: 14,
-    label: "Junior Software Engineer",
-  },
-  {
-    id: 15,
-    label: "Intern",
-  },
-  {
-    id: 16,
-    label: "Cook",
-  },
-  {
-    id: 17,
-    label: "Office Boy",
-  },
-];
+import { alldesgination } from "./allDesignation";
+
 const AddButtonFields = ({ setOpen }) => {
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+
   const [showSuccess,setShowSuccess]=React.useState(false);
   const [showError,setShowError]=React.useState(false);
    const dispatch=useDispatch();
   const theme = useTheme();
   return (
     <>
-
       <Formik
         initialValues={{
           fullName: "",
@@ -118,10 +47,7 @@ const AddButtonFields = ({ setOpen }) => {
           ),
           designation: Yup.string().required("Designation is required"),
         })}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-         
- 
-          
+        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {         
             try { 
                 dispatch(
                     addNewEmployee({
@@ -139,15 +65,11 @@ const AddButtonFields = ({ setOpen }) => {
                     }, 400);
                   })
                   .catch((rejectedValueOrSerializedError) => {
-                 
                     setShowError(true);
                     setTimeout(() => {
                       setShowError(false)
                     }, 1000);
                   });
-
-                
-               
             } catch (err) {
                 console.error(err);
                 if (scriptedRef.current) {
@@ -156,7 +78,6 @@ const AddButtonFields = ({ setOpen }) => {
                     setSubmitting(false);
                 }
             }
-
         }}
       >
         {({
@@ -178,10 +99,8 @@ const AddButtonFields = ({ setOpen }) => {
             >
               <FormControl
                 fullWidth
-                
                 sx={{ ...theme.typography.customInput, mb: 4 }}
               >
-          
                 <TextField
                 error={Boolean(touched.fullName && errors.fullName)}
                   variant="standard"
@@ -194,7 +113,6 @@ const AddButtonFields = ({ setOpen }) => {
                   inputProps={{}}
                   fullWidth
                 />
-
                 {touched.fullName && errors.fullName && (
                   <FormHelperText
                     error
@@ -204,13 +122,10 @@ const AddButtonFields = ({ setOpen }) => {
                   </FormHelperText>
                 )}
               </FormControl>
-
               <FormControl
                 fullWidth
-            
                 sx={{ ...theme.typography.customInput, mb: 4 }}
               >
-               
                 <TextField
                     error={Boolean(touched.email && errors.email)}
                   variant="standard"
@@ -222,7 +137,6 @@ const AddButtonFields = ({ setOpen }) => {
                   label="Email"
                   inputProps={{}}
                 />
-
                 {touched.email && errors.email && (
                   <FormHelperText
                     error
@@ -232,13 +146,10 @@ const AddButtonFields = ({ setOpen }) => {
                   </FormHelperText>
                 )}
               </FormControl>
-
               <FormControl
                 fullWidth
-              
                 sx={{ ...theme.input, mb: 4 }}
               >
-         
                 <TextField
                 error={Boolean(touched.registraionId && errors.registraionId)}
                 variant='standard'
@@ -251,9 +162,7 @@ const AddButtonFields = ({ setOpen }) => {
                   label="RegistraionId"
                   inputProps={{}}
                   fullWidth
-                  
                 />
-
                 {touched.registraionId && errors.registraionId && (
                   <FormHelperText
                     error
@@ -263,7 +172,6 @@ const AddButtonFields = ({ setOpen }) => {
                   </FormHelperText>
                 )}
               </FormControl>
-
               <FormControl
                 fullWidth
                 sx={{ ...theme.typography.customInput, mb: 4 }}
@@ -274,7 +182,6 @@ const AddButtonFields = ({ setOpen }) => {
                   name="designation"
                   onBlur={handleBlur}
                   onChange={(e, newval) => setFieldValue("designation", newval)}
-          
                   disablePortal
                   options={alldesgination.map((option) => option.label)}
                   isOptionEqualToValue={(option, value) =>
@@ -284,7 +191,6 @@ const AddButtonFields = ({ setOpen }) => {
                     <TextField {...params}    error={Boolean(touched.designation && errors.designation)}   variant='standard'    label="Designation" />
                   )}
                 />
-          
               </FormControl>
              {showSuccess&& <Alert severity="success"> Employee added successfully </Alert>}
              {showError&& <Alert severity="error"> Employee Cannot be added </Alert>}
@@ -300,7 +206,6 @@ const AddButtonFields = ({ setOpen }) => {
                   type="submit"
                   disableElevation
                   disabled={isSubmitting}
-
                   variant="outlined"
                 >
                   Create
@@ -308,13 +213,10 @@ const AddButtonFields = ({ setOpen }) => {
               </DialogActions>
             </Box>
           </Container>
-          
         )}
-        
       </Formik>
    
     </>
   );
 };
-
 export default AddButtonFields;

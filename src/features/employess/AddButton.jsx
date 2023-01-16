@@ -1,15 +1,10 @@
 import { Dialog, DialogTitle, Fab, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-
 import AddButtonFields from "./AddButtonFields";
 
 export default function AddButton() {
   const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -28,10 +23,8 @@ export default function AddButton() {
           <AddIcon />
         </Fab>
       </Tooltip>
-
       <Dialog open={open} onClose={handleClose} fullWidth={true}>
         <DialogTitle color="primary">New Employee Details</DialogTitle>
-
         <AddButtonFields setOpen={setOpen} />
       </Dialog>
     </>

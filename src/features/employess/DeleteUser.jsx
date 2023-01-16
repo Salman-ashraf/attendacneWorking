@@ -12,37 +12,34 @@ import { useDispatch } from "react-redux";
 
 export default function DeletUser(props) {
   const [open, setOpen] = React.useState(false);
-  const [showSuccess,setShowSuccess]=React.useState(false);
-  const [showError,setShowError]=React.useState(false);
+  const [showSuccess, setShowSuccess] = React.useState(false);
+  const [showError, setShowError] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
-   const dispatch=useDispatch();
+  const dispatch = useDispatch();
   const handleDelete = () => {
     dispatch(
-        deleteEmployee({
-             id:Number(props.id)
-          })
-        ).unwrap()
-        .then((originalPromiseResult) => {
-          console.log('deleted')
-          setShowSuccess(true);
-          setTimeout(() => {
-            setOpen(false)
-          }, 400);
-        })
-        .catch((rejectedValueOrSerializedError) => {
-       
-            console.log('error')
-          setShowError(true);
-          setTimeout(() => {
-            setShowError(false)
-          }, 1000);
-        });
- 
-
-}
-
+      deleteEmployee({
+        id: Number(props.id),
+      })
+    )
+      .unwrap()
+      .then((originalPromiseResult) => {
+        console.log("deleted");
+        setShowSuccess(true);
+        setTimeout(() => {
+          setOpen(false);
+        }, 400);
+      })
+      .catch((rejectedValueOrSerializedError) => {
+        console.log("error");
+        setShowError(true);
+        setTimeout(() => {
+          setShowError(false);
+        }, 1000);
+      });
+  };
   return (
     <div>
       <IconButton
@@ -55,7 +52,7 @@ export default function DeletUser(props) {
 
       <Dialog
         open={open}
-        onClose={()=>setOpen(false)}
+        onClose={() => setOpen(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -63,13 +60,14 @@ export default function DeletUser(props) {
           {"Are you sure to delete this user?"}
         </DialogTitle>
         <DialogContent>
-        {showSuccess&& <Alert severity="success"> Employee deleted successfully </Alert>}
-             {showError&& <Alert severity="error"> Employee Cannot be deleted </Alert>}
-          <DialogContentText id="alert-dialog-description">
-      
-          </DialogContentText>
+          {showSuccess && (
+            <Alert severity="success"> Employee deleted successfully </Alert>
+          )}
+          {showError && (
+            <Alert severity="error"> Employee Cannot be deleted </Alert>
+          )}
+          <DialogContentText id="alert-dialog-description"></DialogContentText>
         </DialogContent>
-
         <DialogActions>
           <Button onClick={() => setOpen(false)} variant="outlined">
             Cancel

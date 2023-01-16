@@ -5,6 +5,8 @@ import {
   FormControl,
   FormHelperText,
   Grid,
+  IconButton,
+  InputAdornment,
   InputLabel,
   OutlinedInput,
 } from "@mui/material";
@@ -13,7 +15,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
-
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 const LOGIN_URL = "/auth/login";
@@ -25,12 +26,9 @@ export const AuthLogin = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
   const [showPassword, setShowPassword] = React.useState(false);
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
   };
 
   return (
@@ -54,12 +52,12 @@ export const AuthLogin = () => {
               email: values.email,
               password: values.password,
             });
-            console.log(response.data);
             setAuth({
               user: values.email,
               accessToken: response.data.accessToken,
             });
             localStorage.setItem("accessToken", response.data.accessToken);
+            localStorage.setItem("employeeId", 33);
             navigate(from, { replace: true });
           } catch (err) {
             console.error(err);
@@ -129,6 +127,17 @@ export const AuthLogin = () => {
                 onBlur={handleBlur}
                 onChange={handleChange}
                 label="Password"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
                 inputProps={{}}
               />
               {touched.password && errors.password && (

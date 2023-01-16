@@ -1,17 +1,16 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: "flex",
   },
   drawer: {
     width: 240,
@@ -19,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: 240,
-    backgroundColor: '#3f51b5',
+    backgroundColor: "#3f51b5",
   },
   toolbar: theme.mixins.toolbar,
   content: {
@@ -28,10 +27,10 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   listItemText: {
-    color: '#ffffff',
+    color: "#ffffff",
   },
   listItemIcon: {
-    color: '#ffffff',
+    color: "#ffffff",
   },
 }));
 
@@ -49,18 +48,22 @@ export default function SideBaar() {
       >
         <div className={classes.toolbar} />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
             <ListItem button key={text}>
-              <ListItemIcon className={classes.listItemIcon}>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+              <ListItemIcon className={classes.listItemIcon}>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
               <ListItemText className={classes.listItemText} primary={text} />
             </ListItem>
           ))}
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          {["All mail", "Trash", "Spam"].map((text, index) => (
             <ListItem button key={text}>
-              <ListItemIcon className={classes.listItemIcon}>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+              <ListItemIcon className={classes.listItemIcon}>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
               <ListItemText className={classes.listItemText} primary={text} />
             </ListItem>
           ))}

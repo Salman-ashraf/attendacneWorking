@@ -3,14 +3,11 @@ import {
   createEntityAdapter,
   createSlice,
 } from "@reduxjs/toolkit";
-import axios from "axios";
 import axiosAuth from "../../api/axiosAuth";
-const URL = "http://localhost:3000";
 
 const employeeAdapter = createEntityAdapter({
   sortComparer: (a, b) => a.createdAt.localeCompare(b.createdAt),
 });
-
 const initialState = employeeAdapter.getInitialState({
   status: "idle",
   error: null,
@@ -20,9 +17,7 @@ export const fetchAllEmployees = createAsyncThunk(
   "employees/fetchAllEmployees",
   async () => {
     try {
-      const res = await axiosAuth.get(`/employees`, {
-      
-      });
+      const res = await axiosAuth.get(`/employees`, {});
       //  console.log(res.data.data);
       return [...res.data.data];
     } catch (error) {
@@ -78,18 +73,17 @@ export const deleteEmployee = createAsyncThunk(
   async (intialVal) => {
     try {
       const { id } = intialVal;
-       console.log(id)
-       const res = await axiosAuth({
+      console.log(id);
+      const res = await axiosAuth({
         method: "delete",
         url: `/employees/${id}`,
-   
       });
       console.log(res);
       return id;
     } catch (error) {
       console.log("error occured in deleting users");
       console.log(error);
-    throw error
+      throw error;
     }
   }
 );
@@ -116,10 +110,9 @@ const employeeSlice = createSlice({
       builder.addCase(updateEmployee.fulfilled, (state, action) => {
         employeeAdapter.upsertOne(state, action.payload);
       }),
-
       builder.addCase(deleteEmployee.fulfilled, (state, action) => {
         employeeAdapter.removeOne(state, action.payload);
-      })
+      });
   },
 });
 

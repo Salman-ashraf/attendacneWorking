@@ -3,6 +3,6 @@ import React from 'react'
 
 export default function NoFound() {
   return (
-    <Typography variant='h3' sx={{margin:'300px'}} >Page Not Found</Typography>
+    <Typography variant='h3' sx={{margin:'300px',color:'red'}} >Page Not Found !</Typography>
   )
 }

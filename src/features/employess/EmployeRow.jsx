@@ -15,9 +15,8 @@ const EmployeRow = ({ id }) => {
         <TableCell>{employee.email}</TableCell>
         <TableCell>{employee.designation}</TableCell>
         <TableCell>
-          {new Date(employee.createdAt).toLocaleDateString()}{" "}
+          {new Date(employee.createdAt).toLocaleDateString()}
         </TableCell>
-
         <TableCell>
         <Grid
   container

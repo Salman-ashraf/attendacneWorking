@@ -1,4 +1,10 @@
-import { Autocomplete, Container, TextField,Button, ClickAwayListener,  } from "@mui/material";
+import {
+  Autocomplete,
+  Container,
+  TextField,
+  Button,
+  ClickAwayListener,
+} from "@mui/material";
 import React, { useEffect } from "react";
 import "react-date-range/dist/styles.css";
 import { DateRangePicker } from "react-date-range";
@@ -14,10 +20,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import RangeAttendancesTable from "./RangeAttendancesTable";
 import { selectAllEmployees } from "../employess/employeeSlice";
-
-let cal = 2;
-
-// import { DateRange } from './SubComponents/DateRange'
+import { get_productive_hours } from "./usefulFunctions";
 
 export const AttandanceByRange = () => {
   const [user, setUser] = React.useState("");
@@ -28,30 +31,11 @@ export const AttandanceByRange = () => {
       key: "selection",
     },
   ]);
+
   const employees = useSelector(selectAllEmployees);
-  const top100Films = employees.map((item) => {
+  const employeesList = employees.map((item) => {
     return { id: item.id, label: item.name };
   });
-  const diff_hours = (dt2, dt1) => {
-    let diff = (dt2.getTime() - dt1.getTime()) / 1000;
-    diff /= 60 * 60;
-    return Math.abs(Math.round(diff));
-  };
-
-  //return productive hours for one user of his first checkin nd last checkout
-  const get_productive_hours = (oneUser) => {
-    let checkin, checkout;
-
-    if (oneUser[0].state === "checkin") {
-      checkin = oneUser[0].attendanceTime;
-    }
-
-    for (let i = 0; i < oneUser.length; i++) {
-      if (oneUser[i].state === "checkout") checkout = oneUser[i].attendanceTime;
-    }
-
-    return diff_hours(new Date(checkin), new Date(checkout));
-  };
 
   const get_Allattandance = (ar) => {
     if (ar) {
@@ -83,6 +67,7 @@ export const AttandanceByRange = () => {
   const uniqueAttendance = [
     ...new Map(attendances.map((v) => [v.employeeId, v])).values(),
   ];
+
   const employeeAttendance = [];
   for (let i = 0; i < uniqueAttendance.length; i++) {
     let arr;
@@ -101,8 +86,8 @@ export const AttandanceByRange = () => {
   uniqueDates.sort((a, b) => {
     return new Date(a.attendanceTime) - new Date(b.attendanceTime);
   });
-  const allAttendeces = [];
 
+  const allAttendeces = [];
   for (let e = 0; e < employeeAttendance.length; e++) {
     let myar = { employeeId: null, dayHours: [] };
     if (employeeAttendance[e]) {
@@ -147,15 +132,12 @@ export const AttandanceByRange = () => {
     bgcolor: "background.paper",
     zIndex: 2,
   };
-
   const handleClick = () => {
     setOpen((prev) => !prev);
   };
-
   const handleClickAway = () => {
     setOpen(false);
   };
-
   const handleDate = (item) => {
     setRange([item.selection]);
   };
@@ -169,13 +151,12 @@ export const AttandanceByRange = () => {
         <Autocomplete
           onChange={hanldeAutoCompleteChanges}
           disablePortal
-          options={top100Films}
+          options={employeesList}
           isOptionEqualToValue={(option, value) => option.id === value.id}
           sx={{ width: 300 }}
           renderInput={(params) => <TextField {...params} label="Name" />}
         />
       </Container>
-
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <ClickAwayListener
           mouseEvent="onMouseDown"
@@ -200,66 +181,13 @@ export const AttandanceByRange = () => {
                   months={2}
                   ranges={range}
                   direction="horizontal"
-                  
                 />
               </Box>
             ) : null}
           </Box>
         </ClickAwayListener>
       </Container>
-
-      {/* <RangeTable days={uniqueDates} attendances={allAttendeces} /> */}
-
       <RangeAttendancesTable days={uniqueDates} attendances={allAttendeces2} />
     </>
   );
 };
-
-//  const unique = [
-//   ...new Map(
-//     alld.map((v) => [new Date(v.attendanceTime).toDateString(), v])
-//   ).values(),
-// ];
-
-// const dayattendance = [];
-// for (let i = 0; i < unique.length; i++) {
-//   let arr;
-//   arr = alld.filter((item) => {
-//     const flag =
-//       new Date(item.attendanceTime).toDateString() ===
-//       new Date(unique[i].attendanceTime).toDateString();
-//     if (flag) return item;
-//   });
-//   dayattendance.push(arr);
-// }
-
-// const allAttendeces=[];
-
-// for(let e=0;e<employeeAttendance.length;e++)
-// {
-//  let myar={employeeId:null,dayHours:[]};
-//  if(employeeAttendance[e])
-//    {
-//      const uniqueDates = [
-//        ...new Map(
-//          employeeAttendance[e].map((v) => [new Date(v.attendanceTime).toDateString(), v])
-//        ).values(),
-//      ];
-
-//      myar.employeeId=employeeAttendance[e][0].employeeId
-
-//      for (let i = 0; i < uniqueDates.length; i++) {
-//      const onedayAttendance =employeeAttendance[e].filter(item=>{
-//        const flag= new Date(item.attendanceTime).toDateString() ===
-//        new Date(uniqueDates[i].attendanceTime).toDateString();
-//        if(flag)
-//        return item;
-//      })
-//       const biomatricTime=get_Allattandance(onedayAttendance)
-//       const phours=get_productive_hours(biomatricTime);
-//       myar.dayHours.push({biomatricTime,phours,date:uniqueDates[i].attendanceTime})
-//    }
-//  }
-//  allAttendeces.push(myar);
-// }
-// console.log(allAttendeces);

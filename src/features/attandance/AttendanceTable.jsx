@@ -19,66 +19,38 @@ import { selectAllEmployees } from "../employess/employeeSlice";
 import SimpleDialogue from "./SimpleDialogue";
 import EnhancedTableHead from "./subcomponents/EnhancedTableHead";
 import Title from "./Title";
+import { getComparator, get_productive_hours, stableSort } from "./usefulFunctions";
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
+const headCells = [
+  {
+    id: "deviceId",
+    numeric: true,
+    disablePadding: true,
+    label: "DeviceId",
+  },
+  {
+    id: "name",
+    numeric: false,
+    disablePadding: true,
+    label: "Name",
+  },
+  {
+    id: "working_hours",
+    numeric: true,
+    disablePadding: true,
+    label: "Working Hours",
+  },
+];
 
 export default function AttendanceTable({ date }) {
+
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("deviceId");
   const employees = useSelector(selectAllEmployees);
   const attendanceData = useSelector(selectAllAttandance);
   const attendanceStatus = useSelector(getStatus);
-
-  
-  const headCells = [
-    {
-      id: "deviceId",
-      numeric: true,
-      disablePadding: true,
-      label: "DeviceId",
-    },
-    {
-      id: "name",
-      numeric: false,
-      disablePadding: true,
-      label: "Name",
-    },
-    {
-      id: "working_hours",
-      numeric: true,
-      disablePadding: true,
-      label: "Working Hours",
-    },
-  ];
-
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(
       fetchAllAttandanceOfDate({
@@ -87,30 +59,10 @@ export default function AttendanceTable({ date }) {
     );
   }, [date]);
 
-  //return difference between two time
-  const diff_hours = (dt2, dt1) => {
-    let diff = (dt2.getTime() - dt1.getTime()) / 1000;
-    diff /= 60 * 60;
-    return Math.abs(Math.round(diff));
-  };
-
-  //return productive hours for one user of his first checkin nd last checkout
-  const get_productive_hours = (oneUser) => {
-    if (oneUser) {
-      let checkin, checkout;
-
-      if (oneUser[0].state === "checkin") {
-        checkin = oneUser[0].attendanceTime;
-      }
-
-      for (let i = 0; i < oneUser.length; i++) {
-        if (oneUser[i].state === "checkout")
-          checkout = oneUser[i].attendanceTime;
-      }
-
-      return diff_hours(new Date(checkin), new Date(checkout));
-    }
-    return null;
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
   };
 
   const get_Allattandance = (id) => {
@@ -121,14 +73,16 @@ export default function AttendanceTable({ date }) {
           : null;
       })
       .filter((item) => item && item);
-
     result.sort((a, b) => {
       return new Date(a.attendanceTime) - new Date(b.attendanceTime);
     });
     return result.length ? result : null;
   };
+
+
   const attandanceRows = employees.map((item) => {
     return {
+      id:item.id,
       deviceId: item.deviceId,
       name: item.name,
       working_hours: get_productive_hours(get_Allattandance(item.id)),
@@ -136,14 +90,11 @@ export default function AttendanceTable({ date }) {
     };
   });
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-
+  // const attandanceRows2 = attandanceRows.filter((item) => {
+  //   if (localStorage.getItem('employeeId')) return item.id == localStorage.getItem('employeeId')
+  //   return item;
+  // });
+  
   return (
     <>
       <Container
@@ -167,12 +118,11 @@ export default function AttendanceTable({ date }) {
                   onRequestSort={handleRequestSort}
                   rowCount={attandanceRows.length}
                 />
-
                 <TableBody>
                   {attendanceStatus == "pending" ? (
                     <TableRow>
                       <TableCell>
-                        <h2> Loading</h2>{" "}
+                        <h2> Loading</h2>
                       </TableCell>
                     </TableRow>
                   ) : attendanceStatus == "rejected" ? (
@@ -195,7 +145,6 @@ export default function AttendanceTable({ date }) {
                             key={row.name}
                           >
                             <TableCell>{row.deviceId}</TableCell>
-
                             <TableCell
                               align="center"
                               component="th"
@@ -231,7 +180,7 @@ export default function AttendanceTable({ date }) {
               </Table>
             </TableContainer>
           </Paper>
-        </Box>{" "}
+        </Box>
       </Container>
     </>
   );

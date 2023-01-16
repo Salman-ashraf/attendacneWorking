@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import {
@@ -27,10 +26,8 @@ export default function DialogContents(props) {
   return (
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>
-        Biometric Time of {props.name} on{" "}
-        {new Date(
-          props.biometricTime[0].attendanceTime
-          ).toLocaleDateString()}
+        Biometric Time of {props.name} on
+        {new Date(props.biometricTime[0].attendanceTime).toLocaleDateString()}
       </DialogTitle>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <TableContainer component={Paper}>
@@ -44,10 +41,8 @@ export default function DialogContents(props) {
               {props.biometricTime.map((row) => (
                 <TableRow key={row.attendanceTime}>
                   <TableCell align="center">
-                    {" "}
                     {row.state} =
-                    {new Date(
-                      row.attendanceTime).toLocaleTimeString()}
+                    {new Date(row.attendanceTime).toLocaleTimeString()}
                   </TableCell>
                 </TableRow>
               ))}

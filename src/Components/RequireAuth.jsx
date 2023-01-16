@@ -1,10 +1,8 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
 
-const RequireAuth = ({ allowedRoles }) => {
-  const { auth } = useAuth();
+const RequireAuth = () => {
   const location = useLocation();
-  const token=localStorage.getItem('accessToken')
+  const token = localStorage.getItem("accessToken");
   return token ? (
     <Outlet />
   ) : (

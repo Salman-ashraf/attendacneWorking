@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import axiosAuth from '../../api/axiosAuth'
-const URL = "http://localhost:3000";
-
+import axiosAuth from "../../api/axiosAuth";
 const initialState = {
   attandance: [],
   status: "idle",
@@ -15,29 +12,24 @@ export const fetchAllAttandanceOfDate = createAsyncThunk(
     try {
       const res = await axiosAuth.get(`/attendances/employees/`, {
         params: { date },
- });
-    //  console.log(res);
+      });
+      //  console.log(res);
       return [...res.data.data];
     } catch (error) {
-
       console.log("error occured in fetchAllAttandanceOfDate ");
       console.log(error);
-      throw(error)
-      return (error);
+      throw error;
     }
   }
 );
 
-
 export const fetchAllAttandanceBetweenDate = createAsyncThunk(
   "attandace/fetchAllAttandanceBetweenDate",
   async ({ fromDate, toDate }) => {
-
-    
     try {
       const res = await axiosAuth.get(`/employees/reports/`, {
         params: { fromDate, toDate },
-  });
+      });
       //console.log(res.data.data);
       return [...res.data.data];
     } catch (error) {
@@ -57,38 +49,32 @@ const attandanceSlice = createSlice({
       state.status = "fulfilled";
       state.attandance = [...action.payload];
     }),
-      builder.addCase(fetchAllAttandanceOfDate.pending, (state, action) => {
+      builder.addCase(fetchAllAttandanceOfDate.pending, (state) => {
         state.status = "pending";
       }),
       builder.addCase(fetchAllAttandanceOfDate.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.payload;
       }),
-      builder.addCase(
-        fetchAllAttandanceBetweenDate.pending,
-        (state) => {
-          state.status = "pending";
-        }
-      ),
-      builder.addCase(
-        fetchAllAttandanceBetweenDate.rejected,
-        (state) => {
-          state.status = "rejected";
-        }
-      );
+      builder.addCase(fetchAllAttandanceBetweenDate.pending, (state) => {
+        state.status = "pending";
+      }),
+      builder.addCase(fetchAllAttandanceBetweenDate.rejected, (state) => {
+        state.status = "rejected";
+      });
 
-      builder.addCase(
-        fetchAllAttandanceBetweenDate.fulfilled,
-        (state, action) => {
-          state.status = "fulfilled";
-          state.attandance = [...action.payload];
-        }
-      );
+    builder.addCase(
+      fetchAllAttandanceBetweenDate.fulfilled,
+      (state, action) => {
+        state.status = "fulfilled";
+        state.attandance = [...action.payload];
+      }
+    );
   },
 });
 
-export const selectAllAttandance = (state) => state.Attandace.attandance;
 
-export const getStatus=(state)=>state.Attandace.status;
-export const getError=(state)=>state.Attandace.error;
+export const selectAllAttandance = (state) => state.Attandace.attandance;
+export const getStatus = (state) => state.Attandace.status;
+export const getError = (state) => state.Attandace.error;
 export default attandanceSlice.reducer;
