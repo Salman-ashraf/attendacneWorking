@@ -19,8 +19,11 @@ import {
 } from "./attandaceSlice";
 import { useDispatch, useSelector } from "react-redux";
 import RangeAttendancesTable from "./RangeAttendancesTable";
-import { selectAllEmployees } from "../employess/employeeSlice";
-import { get_productive_hours } from "./usefulFunctions";
+import {
+  selectAllEmployees,
+  selectEmployeeIds,
+} from "../employess/employeeSlice";
+import { getDaysArray, get_productive_hours } from "./usefulFunctions";
 
 export const AttandanceByRange = () => {
   const [user, setUser] = React.useState("");
@@ -64,64 +67,55 @@ export const AttandanceByRange = () => {
   }, [range]);
 
   const attendances = useSelector(selectAllAttandance);
-  const uniqueAttendance = [
-    ...new Map(attendances.map((v) => [v.employeeId, v])).values(),
-  ];
+  const emplids = useSelector(selectEmployeeIds);
 
-  const employeeAttendance = [];
-  for (let i = 0; i < uniqueAttendance.length; i++) {
+  const employeeList = [];
+  for (let i = 0; i < emplids.length; i++) {
     let arr;
     arr = attendances.filter((item) => {
-      const flag = item.employeeId === uniqueAttendance[i].employeeId;
+      const flag = item.employeeId == emplids[i];
       if (flag) return item;
     });
-    employeeAttendance.push(arr);
+    employeeList.push({ [emplids[i]]: arr });
   }
 
-  const uniqueDates = [
-    ...new Map(
-      attendances.map((v) => [new Date(v.attendanceTime).toDateString(), v])
-    ).values(),
-  ];
-  uniqueDates.sort((a, b) => {
-    return new Date(a.attendanceTime) - new Date(b.attendanceTime);
-  });
-
-  const allAttendeces = [];
-  for (let e = 0; e < employeeAttendance.length; e++) {
+  const daysArray = getDaysArray(range[0].startDate, range[0].endDate);
+  const newAttendance = [];
+  for (let e = 0; e < employeeList.length; e++) {
     let myar = { employeeId: null, dayHours: [] };
-    if (employeeAttendance[e]) {
-      myar.employeeId = employeeAttendance[e][0].employeeId;
+    if (employeeList[e]) {
+      myar.employeeId = Number(Object.keys(employeeList[e]));
+      for (let i = 0; i < daysArray.length; i++) {
+        const onedayAttendance = employeeList[e][myar.employeeId].filter(
+          (item) => {
+            const flag =
+              new Date(item.attendanceTime).toDateString() ===
+              new Date(daysArray[i]).toDateString();
+            if (flag) return item;
+          }
+        );
 
-      for (let i = 0; i < uniqueDates.length; i++) {
-        const onedayAttendance = employeeAttendance[e].filter((item) => {
-          const flag =
-            new Date(item.attendanceTime).toDateString() ===
-            new Date(uniqueDates[i].attendanceTime).toDateString();
-          if (flag) return item;
-        });
         if (onedayAttendance.length > 1) {
           const biomatricTime = get_Allattandance(onedayAttendance);
           const phours = get_productive_hours(biomatricTime);
           myar.dayHours.push({
             biomatricTime,
             phours,
-            date: uniqueDates[i].attendanceTime,
+            date: daysArray[i],
           });
         } else {
           myar.dayHours.push({
             biomatricTime: null,
             phours: null,
-            date: uniqueDates[i].attendanceTime,
+            date: daysArray[i],
           });
         }
       }
     }
-
-    allAttendeces.push(myar);
+    newAttendance.push(myar);
   }
 
-  const allAttendeces2 = allAttendeces.filter((item) => {
+  const allAttendeces2 = newAttendance.filter((item) => {
     if (user) return item.employeeId == user.id;
     return item;
   });
@@ -187,7 +181,7 @@ export const AttandanceByRange = () => {
           </Box>
         </ClickAwayListener>
       </Container>
-      <RangeAttendancesTable days={uniqueDates} attendances={allAttendeces2} />
+      <RangeAttendancesTable days={daysArray} attendances={allAttendeces2} />
     </>
   );
 };

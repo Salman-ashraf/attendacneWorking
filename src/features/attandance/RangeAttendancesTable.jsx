@@ -21,9 +21,9 @@ export default function RangeAttendancesTable({ days, attendances }) {
   const [orderBy, setOrderBy] = React.useState("deviceId");
   const employees = useSelector(selectAllEmployees);
   const attendanceStatus = useSelector(getStatus);
-
+    console.log
   const columns = days.map((item) => {
-    return { id: item.id, label: new Date(item.attendanceTime).toDateString() };
+    return { id: item, label: new Date(item).toDateString() };
   });
   columns.unshift({ id: "Employeename", label: "Name" });
   columns.unshift({ id: "deviceId", label: "DeviceId" });
@@ -45,7 +45,8 @@ export default function RangeAttendancesTable({ days, attendances }) {
     return item;
   });
 
-  const handleRequestSort = (property) => {
+   
+  const handleRequestSort = (e,property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
@@ -99,9 +100,10 @@ export default function RangeAttendancesTable({ days, attendances }) {
                         >
                           <TableCell> {row.deviceId} </TableCell>
                           <TableCell> {row.employeeName} </TableCell>
+                          
                           {row.dayHours.map((column, index) => {
                             return (
-                              <TableCell key={index}>
+                              <TableCell key={index} sx={{backgroundColor:new Date(column.date).getDay()==6 || new Date(column.date).getDay()==0 ?'#E4ECAF':''}}>
                                 <Stack>
                                   {column.phours
                                     ? `${column.phours} Hours`
