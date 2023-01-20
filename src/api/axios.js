@@ -1,4 +1,7 @@
 import axios from "axios";
-export default axios.create({
-  baseURL: "http://localhost:3000",
-});
+const api = axios.create({
+  baseURL: 'http://localhost:3000'
+  });
+
+  // axiosAuth.defaults.headers.common['x-access-token'] = localStorage.getItem('accessToken')
+  export default api

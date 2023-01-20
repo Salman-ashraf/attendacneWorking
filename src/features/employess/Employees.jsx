@@ -18,7 +18,7 @@ import EmployeRow from "./EmployeRow";
 export default function Employees() {
   const employess = useSelector(selectEmployeeIds);
   const employeeStatus = useSelector(getEmployeeStatus);
-  console.log(employess)
+  // console.log(employess)
   return (
     <>
       <Container

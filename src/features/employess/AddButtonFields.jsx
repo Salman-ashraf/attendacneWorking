@@ -58,7 +58,7 @@ const AddButtonFields = ({ setOpen }) => {
                     })
                   ).unwrap()
                   .then((originalPromiseResult) => {
-                    console.log('addee success')
+                    // console.log('addee success')
                     setShowSuccess(true);
                     setTimeout(() => {
                       setOpen(false)

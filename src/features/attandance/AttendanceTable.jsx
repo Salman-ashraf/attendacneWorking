@@ -20,6 +20,8 @@ import SimpleDialogue from "./SimpleDialogue";
 import EnhancedTableHead from "./subcomponents/EnhancedTableHead";
 import Title from "./Title";
 import { getComparator, get_productive_hours, stableSort } from "./usefulFunctions";
+import useAuth from '../../hooks/useAuth'
+
 
 const headCells = [
   {
@@ -43,7 +45,7 @@ const headCells = [
 ];
 
 export default function AttendanceTable({ date }) {
-
+  const {isAdmin,user}=useAuth();
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("deviceId");
   const employees = useSelector(selectAllEmployees);
@@ -79,8 +81,14 @@ export default function AttendanceTable({ date }) {
     return result.length ? result : null;
   };
 
+  const allemployees = employees.filter((item) => {
+    if (!isAdmin) return item.id == user.id;
+    return item;
+  });
+  //  console.log(allemployees)
 
-  const attandanceRows = employees.map((item) => {
+   
+  const attandanceRows = allemployees.map((item) => {
     return {
       id:item.id,
       deviceId: item.deviceId,

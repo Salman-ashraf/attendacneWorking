@@ -1,7 +1,19 @@
-import { useContext } from "react";
-import AuthContext from "../context/AuthProvider";
+import { useContext } from 'react';
+
+// auth provider
+import AuthContext from '../context/JWTContext';
+// import AuthContext from 'contexts/Auth0Context';
+// import AuthContext from 'contexts/JWTContext';
+// import AuthContext from 'contexts/AWSCognitoContext';
+
+// ==============================|| AUTH HOOKS ||============================== //
 
 const useAuth = () => {
-    return useContext(AuthContext);
-}
+    const context = useContext(AuthContext);
+
+    if (!context) throw new Error('context must be use inside provider');
+
+    return context;
+};
+
 export default useAuth;

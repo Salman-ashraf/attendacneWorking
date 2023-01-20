@@ -3,7 +3,7 @@ import {
   createEntityAdapter,
   createSlice,
 } from "@reduxjs/toolkit";
-import axiosAuth from "../../api/axiosAuth";
+import axios from "../../api/axios";
 
 const employeeAdapter = createEntityAdapter({
   sortComparer: (a, b) => a.createdAt.localeCompare(b.createdAt),
@@ -17,7 +17,7 @@ export const fetchAllEmployees = createAsyncThunk(
   "employees/fetchAllEmployees",
   async () => {
     try {
-      const res = await axiosAuth.get(`/employees`, {});
+      const res = await axios.get(`/employees`, {});
       //  console.log(res.data.data);
       return [...res.data.data];
     } catch (error) {
@@ -32,7 +32,7 @@ export const addNewEmployee = createAsyncThunk(
   "employees/addNewEmployee",
   async (newEmployee) => {
     try {
-      const res = await axiosAuth({
+      const res = await axios({
         method: "post",
         url: `/employees`,
         data: newEmployee,
@@ -53,7 +53,7 @@ export const updateEmployee = createAsyncThunk(
     try {
       const { name, designation, email, id } = intialVal;
 
-      const res = await axiosAuth({
+      const res = await axios({
         method: "put",
         url: `/employees/${id}`,
         data: { name, designation, email },
@@ -74,7 +74,7 @@ export const deleteEmployee = createAsyncThunk(
     try {
       const { id } = intialVal;
       console.log(id);
-      const res = await axiosAuth({
+      const res = await axios({
         method: "delete",
         url: `/employees/${id}`,
       });

@@ -19,7 +19,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "./listItems";
 import { Outlet, useNavigate } from "react-router-dom";
-
+import SideBarList from "./SideBarList";
 function Copyright(props) {
   return (
     <Typography
@@ -185,7 +185,7 @@ export default function Home() {
         </Toolbar>
         <Divider />
         <List component="nav">
-          {mainListItems}
+         <SideBarList/>
           <Divider sx={{ my: 1 }} />
         </List>
       </Drawer>

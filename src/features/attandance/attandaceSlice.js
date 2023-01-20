@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosAuth from "../../api/axiosAuth";
+import axios from "../../api/axios";
 const initialState = {
   attandance: [],
   status: "idle",
@@ -10,7 +10,7 @@ export const fetchAllAttandanceOfDate = createAsyncThunk(
   "attandace/fetchAllAttandanceOfDate",
   async ({ date }) => {
     try {
-      const res = await axiosAuth.get(`/attendances/employees/`, {
+      const res = await axios.get(`/attendances/employees/`, {
         params: { date },
       });
       //  console.log(res);
@@ -27,7 +27,7 @@ export const fetchAllAttandanceBetweenDate = createAsyncThunk(
   "attandace/fetchAllAttandanceBetweenDate",
   async ({ fromDate, toDate }) => {
     try {
-      const res = await axiosAuth.get(`/employees/reports/`, {
+      const res = await axios.get(`/employees/reports/`, {
         params: { fromDate, toDate },
       });
       //console.log(res.data.data);

@@ -17,19 +17,23 @@ import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
+
 const LOGIN_URL = "/auth/login";
 
 export const AuthLogin = () => {
   const theme = useTheme();
-  const { setAuth } = useAuth();
+  const {login}=useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => {
+
+
     setShowPassword(!showPassword);
   };
+
 
   return (
     <>
@@ -48,17 +52,9 @@ export const AuthLogin = () => {
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
-            const response = await axios.post(LOGIN_URL, {
-              email: values.email,
-              password: values.password,
-            });
-            setAuth({
-              user: values.email,
-              accessToken: response.data.accessToken,
-            });
-            localStorage.setItem("accessToken", response.data.accessToken);
-            localStorage.setItem("employeeId", 33);
-            navigate(from, { replace: true });
+            await login(values.email,values.password);
+            navigate("/");
+
           } catch (err) {
             console.error(err);
             console.log("error");

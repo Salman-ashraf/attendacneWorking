@@ -24,9 +24,11 @@ import {
   selectEmployeeIds,
 } from "../employess/employeeSlice";
 import { getDaysArray, get_productive_hours } from "./usefulFunctions";
+import useAuth from "../../hooks/useAuth";
 
-export const AttandanceByRange = () => {
-  const [user, setUser] = React.useState("");
+ const AttandanceByRange = () => {
+  const {isAdmin,user,loading}=useAuth();
+  const [oneEmployee, setOneEmployee] = React.useState("");
   const [range, setRange] = useState([
     {
       startDate: subDays(new Date(), 8),
@@ -67,7 +69,15 @@ export const AttandanceByRange = () => {
   }, [range]);
 
   const attendances = useSelector(selectAllAttandance);
-  const emplids = useSelector(selectEmployeeIds);
+  const allemployees = useSelector(selectEmployeeIds);
+
+  
+  const emplids  = allemployees.filter((item) => {
+    if (!isAdmin) return item === user.id;
+    return item;
+  });
+  //  console.log(allemployees)
+
 
   const employeeList = [];
   for (let i = 0; i < emplids.length; i++) {
@@ -116,7 +126,7 @@ export const AttandanceByRange = () => {
   }
 
   const allAttendeces2 = newAttendance.filter((item) => {
-    if (user) return item.employeeId == user.id;
+    if (oneEmployee) return item.employeeId == oneEmployee.id;
     return item;
   });
 
@@ -136,18 +146,20 @@ export const AttandanceByRange = () => {
     setRange([item.selection]);
   };
   const hanldeAutoCompleteChanges = (event, newValue) => {
-    setUser(newValue);
+    setOneEmployee(newValue);
   };
 
   return (
     <>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Autocomplete
+         sx={{ display:isAdmin?'flex':'none' ,width: 300,}}
+          // disabled={!isAdmin}
           onChange={hanldeAutoCompleteChanges}
           disablePortal
           options={employeesList}
           isOptionEqualToValue={(option, value) => option.id === value.id}
-          sx={{ width: 300 }}
+       
           renderInput={(params) => <TextField {...params} label="Name" />}
         />
       </Container>
@@ -185,3 +197,5 @@ export const AttandanceByRange = () => {
     </>
   );
 };
+
+export default AttandanceByRange;
