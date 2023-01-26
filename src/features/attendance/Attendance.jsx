@@ -5,7 +5,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { subDays } from "date-fns";
 import AttendanceTable from "./AttendanceTable";
 
-export default function Attandance() {
+export default function Attendance() {
   const [value, setValue] = React.useState();
 
   useEffect(() => {
@@ -27,6 +27,7 @@ export default function Attandance() {
     <>
       {value && (
         <Box>
+          
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker

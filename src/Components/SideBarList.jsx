@@ -21,20 +21,20 @@ const SideBarList = () => {
       />
     </ListItemButton>
 
-    <ListItemButton component={NavLink} to="attandance">
+    <ListItemButton component={NavLink} to="attendance">
       <ListItemIcon>
         <FingerprintIcon />
       </ListItemIcon>
 
-      <ListItemText primary="Attandance" />
+      <ListItemText primary="Attendance" />
     </ListItemButton>
 
-    <ListItemButton component={NavLink} to="attandancebyrange">
+    <ListItemButton component={NavLink} to="report">
       <ListItemIcon>
         <DateRangeIcon />
       </ListItemIcon>
 
-      <ListItemText primary="AttandanceByRange" />
+      <ListItemText primary="Report" />
     </ListItemButton>
   </>
   )

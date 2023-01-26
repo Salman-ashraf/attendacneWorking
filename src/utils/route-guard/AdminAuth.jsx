@@ -50,7 +50,8 @@ const AdminAuth = () => {
      }
     </>
     )
-    
+    // console.log(isAdmin)
+    // return (<Outlet/>)
     //  (<Outlet/>);
 };
 

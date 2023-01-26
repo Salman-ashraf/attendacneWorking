@@ -29,28 +29,24 @@ const RequireAuth = ({ allowedRoles }) => {
     // }, [location.pathname]);
     // console.log(token);
 
-    // useEffect(() => {
+    useEffect(() => {
      
-    //     if (!token) {
-    //         navigate('signin', { replace: true });
-    //     }
-        
-           
+        if (!token) {
+            navigate('signin', { replace: true });
+        }
+    }, [token, navigate]);
      
-    // }, [token, navigate]);
-     
-    return  (<>
-     {
-       !loading && 
-       !isLoggedIn ?
-       <Navigate to ='signin'/>
-       :
-       <Outlet/>
-     }
-    </>
-    )
-    
-    //  (<Outlet/>);
+    // return  (<>
+    //  {
+    //    !loading && 
+    //    !isLoggedIn ?
+    //    <Navigate to ='signin' replace/>
+    //    :
+    //    <Outlet/>
+    //  }
+    // </>
+    // )
+    return (<>{token && <Outlet/>}</>)
 };
 
 RequireAuth.propTypes = {

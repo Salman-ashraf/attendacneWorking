@@ -8,17 +8,25 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import AddButton from "./AddButton";
-import Title from "../attandance/Title";
-import { useSelector } from "react-redux";
-import { getEmployeeStatus, selectEmployeeIds } from "./employeeSlice";
+import Title from "../attendance/Title";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllEmployees, getEmployeeStatus, selectEmployeeIds } from "./employeeSlice";
 import EmployeRow from "./EmployeRow";
+import CircularLoader from "../../Components/CircularLoader";
 
 export default function Employees() {
   const employess = useSelector(selectEmployeeIds);
   const employeeStatus = useSelector(getEmployeeStatus);
   // console.log(employess)
+  const dispatch=useDispatch();
+  useEffect(() => {
+    dispatch(
+      fetchAllEmployees({})
+    );
+  }, []);
+
   return (
     <>
       <Container
@@ -31,7 +39,7 @@ export default function Employees() {
         }}
       >
         <Paper sx={{ p: 2 }}>
-          <Title>Techonology Rivers Employee</Title>
+          <Title>Employees</Title>
           <TableContainer sx={{ maxHeight: 560 }}>
             <Table size="small">
               <TableHead>
@@ -49,7 +57,7 @@ export default function Employees() {
                 {employeeStatus == "pending" ? (
                   <TableRow>
                     <TableCell>
-                      <h2> Loading</h2>{" "}
+                   <CircularLoader/>
                     </TableCell>
                   </TableRow>
                 ) : employeeStatus == "rejected" ? (

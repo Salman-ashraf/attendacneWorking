@@ -17,9 +17,13 @@ import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { mainListItems } from "./listItems";
 import { Outlet, useNavigate } from "react-router-dom";
 import SideBarList from "./SideBarList";
+import { fetchAllEmployees } from "../features/employess/employeeSlice";
+import { useDispatch } from "react-redux";
+import { Logout } from "@mui/icons-material";
+import useAuth from "../hooks/useAuth";
+
 function Copyright(props) {
   return (
     <Typography
@@ -88,12 +92,12 @@ const Drawer = styled(MuiDrawer, {
 
 export default function Home() {
   const [open, setOpen] = React.useState(true);
-
+   const {logout}=useAuth();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleLogOut = () => {
     console.log("logout");
-    localStorage.removeItem("accessToken");
+     logout();
     navigate("/signin", { replace: true });
   };
   const handleMenu = (event) => {
@@ -106,13 +110,18 @@ export default function Home() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+    const dispatch=useDispatch();
+  React.useEffect(() => {
+   dispatch(fetchAllEmployees());
+  }, [])
+  
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
 
       {/* Main Navbar */}
-
+         
       <AppBar position="absolute" open={open}>
         <Toolbar
           sx={{
@@ -202,10 +211,10 @@ export default function Home() {
       >
         <Toolbar />
 
-        {/* this is main page which is showing productive hours for yesterday Attandance */}
+        {/* this is main page which is showing productive hours for yesterday Attendance */}
 
         <Outlet />
-
+        
         <Copyright sx={{ pt: 4 }} />
       </Box>
     </Box>

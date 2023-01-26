@@ -38,11 +38,11 @@ export function stableSort(array, comparator) {
  export const get_productive_hours = (oneUser) => {
     if (oneUser) {
       let checkin, checkout;
-      if (oneUser[0].state === "checkin") {
+      if (oneUser[0].state === "check-in") {
         checkin = oneUser[0].attendanceTime;
       }
       for (let i = 0; i < oneUser.length; i++) {
-        if (oneUser[i].state === "checkout")
+        if (oneUser[i].state === "check-out")
           checkout = oneUser[i].attendanceTime; }
       return diff_hours(new Date(checkin), new Date(checkout));
     }

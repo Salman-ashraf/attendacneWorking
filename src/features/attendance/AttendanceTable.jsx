@@ -1,6 +1,7 @@
 import {
   Container,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -11,9 +12,9 @@ import { Box } from "@mui/system";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchAllAttandanceOfDate,
+  fetchAllAttendanceOfDate,
   getStatus,
-  selectAllAttandance,
+  selectAllAttendance,
 } from "./attandaceSlice";
 import { selectAllEmployees } from "../employess/employeeSlice";
 import SimpleDialogue from "./SimpleDialogue";
@@ -21,6 +22,7 @@ import EnhancedTableHead from "./subcomponents/EnhancedTableHead";
 import Title from "./Title";
 import { getComparator, get_productive_hours, stableSort } from "./usefulFunctions";
 import useAuth from '../../hooks/useAuth'
+import CircularLoader from "../../Components/CircularLoader";
 
 
 const headCells = [
@@ -49,13 +51,13 @@ export default function AttendanceTable({ date }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("deviceId");
   const employees = useSelector(selectAllEmployees);
-  const attendanceData = useSelector(selectAllAttandance);
+  const attendanceData = useSelector(selectAllAttendance);
   const attendanceStatus = useSelector(getStatus);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(
-      fetchAllAttandanceOfDate({
+      fetchAllAttendanceOfDate({
         date: new Date(date).toISOString(),
       })
     );
@@ -67,7 +69,7 @@ export default function AttendanceTable({ date }) {
     setOrderBy(property);
   };
 
-  const get_Allattandance = (id) => {
+  const get_Allattendance = (id) => {
     const result = attendanceData
       .map((item) => {
         return item.employeeId == id
@@ -88,17 +90,17 @@ export default function AttendanceTable({ date }) {
   //  console.log(allemployees)
 
    
-  const attandanceRows = allemployees.map((item) => {
+  const attendanceRows = allemployees.map((item) => {
     return {
       id:item.id,
       deviceId: item.deviceId,
       name: item.name,
-      working_hours: get_productive_hours(get_Allattandance(item.id)),
-      biometricTime: get_Allattandance(item.id),
+      working_hours: get_productive_hours(get_Allattendance(item.id)),
+      biometricTime: get_Allattendance(item.id),
     };
   });
 
-  // const attandanceRows2 = attandanceRows.filter((item) => {
+  // const attendanceRows2 = attendanceRows.filter((item) => {
   //   if (localStorage.getItem('employeeId')) return item.id == localStorage.getItem('employeeId')
   //   return item;
   // });
@@ -124,13 +126,13 @@ export default function AttendanceTable({ date }) {
                   order={order}
                   orderBy={orderBy}
                   onRequestSort={handleRequestSort}
-                  rowCount={attandanceRows.length}
+                  rowCount={attendanceRows.length}
                 />
                 <TableBody>
                   {attendanceStatus == "pending" ? (
                     <TableRow>
                       <TableCell>
-                        <h2> Loading</h2>
+                     <CircularLoader/>
                       </TableCell>
                     </TableRow>
                   ) : attendanceStatus == "rejected" ? (
@@ -142,7 +144,7 @@ export default function AttendanceTable({ date }) {
                   ) : (
                     <>
                       {stableSort(
-                        attandanceRows,
+                        attendanceRows,
                         getComparator(order, orderBy)
                       ).map((row, index) => {
                         return (
@@ -162,22 +164,25 @@ export default function AttendanceTable({ date }) {
                               {row.name}
                             </TableCell>
                             <TableCell align="right">
+                              <Stack  justifyContent="left" direction='column' sx={{paddingRight: '10px'}}>
                               {row.working_hours
                                 ? `${row.working_hours} Hours`
                                 : isNaN(row.working_hours)
                                 ? "TBD Hours"
                                 : " "}
                               {row.biometricTime ? (
-                                <SimpleDialogue
+                              <Box  sx={{paddingRight: '10px'}}>  <SimpleDialogue
+                              
                                   //sending props as array of all checkin and chechkout
                                   biometricTime={row.biometricTime}
                                   name={row.name}
-                                />
+                                /></Box>
                               ) : (
                                 <p>
                                   <b>Absent</b>
                                 </p>
                               )}
+                              </Stack>
                             </TableCell>
                           </TableRow>
                         );

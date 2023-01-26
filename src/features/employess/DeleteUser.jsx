@@ -6,42 +6,42 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Alert, IconButton } from "@mui/material";
+import { Alert, IconButton, Snackbar, Tooltip } from "@mui/material";
 import { deleteEmployee } from "./employeeSlice";
 import { useDispatch } from "react-redux";
 
 export default function DeletUser(props) {
   const [open, setOpen] = React.useState(false);
   const [showSuccess, setShowSuccess] = React.useState(false);
-  const [showError, setShowError] = React.useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const [openSnackbar, setOpenSnakbar] = React.useState(false);
+
   const dispatch = useDispatch();
   const handleDelete = () => {
     dispatch(
       deleteEmployee({
-        id: Number(props.id),
+        id:props.id,
       })
     )
-      .unwrap()
       .then((originalPromiseResult) => {
         console.log("deleted");
         setShowSuccess(true);
+        setOpenSnakbar(true)
         setTimeout(() => {
+          console.log('close now')
           setOpen(false);
-        }, 400);
+        }, 2000);
+     
       })
       .catch((rejectedValueOrSerializedError) => {
-        console.log("error");
-        setShowError(true);
-        setTimeout(() => {
-          setShowError(false);
-        }, 1000);
+        setShowSuccess(false);
+      setOpenSnakbar(true);
       });
   };
   return (
     <div>
+       <Tooltip title="Delete">
+   
+   
       <IconButton
         color="primary"
         aria-label="edit"
@@ -49,29 +49,38 @@ export default function DeletUser(props) {
       >
         <DeleteIcon color="primary" />
       </IconButton>
-
+      </Tooltip>
       <Dialog
         open={open}
-        onClose={() => setOpen(false)}
+        
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Are you sure to delete this user?"}
+        Delete Employee
         </DialogTitle>
         <DialogContent>
-          {showSuccess && (
-            <Alert severity="success"> Employee deleted successfully </Alert>
-          )}
-          {showError && (
-            <Alert severity="error"> Employee Cannot be deleted </Alert>
-          )}
-          <DialogContentText id="alert-dialog-description"></DialogContentText>
+       
+        <Snackbar
+        open={openSnackbar}
+        autoHideDuration={1000}
+        anchorOrigin={{ vertical:'top', horizontal:'right' }}
+        onClose={()=>setOpenSnakbar(false)}
+        >
+<Alert onClose={()=>setOpenSnakbar(false)} severity={showSuccess?'success':'error'} sx={{ width: '100%' }}>
+   {showSuccess?'Employee deleted successfully':'Employee Cannot be deleted'}
+  </Alert>
+        </Snackbar>
+ 
+          <DialogContentText id="alert-dialog-description">
+            Are you sure to delete this employee ?
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)} variant="outlined">
             Cancel
           </Button>
+
           <Button variant="outlined" onClick={handleDelete} color="error">
             Delete
           </Button>

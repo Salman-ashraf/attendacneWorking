@@ -10,8 +10,24 @@ import {
 import { useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { AuthLogin } from "./AuthLogin";
+import useAuth from "../hooks/useAuth";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Copyright(props) {
+  const { getaccessToken } = useAuth();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const token = getaccessToken();
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    console.log(token);
+    if (token) {
+      {
+        navigate(from, { replace: true });
+      }
+    }
+  }, [token]);
+
   return (
     <Typography
       variant="body2"

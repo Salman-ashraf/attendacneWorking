@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import attandanceReducer from '../features/attandance/attandaceSlice'
+import attendanceReducer from '../features/attendance/attandaceSlice'
 import employeeReducer from '../features/employess/employeeSlice'
 const store=configureStore({
     reducer:{
-        Attandace:attandanceReducer,
+        Attandace:attendanceReducer,
         Employee:employeeReducer
     }
 })

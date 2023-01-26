@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import {
+  Alert,
   Box,
   Button,
   FormControl,
@@ -11,32 +12,29 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import { Formik } from "formik";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import {  Visibility, VisibilityOff } from "@mui/icons-material";
 import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
-import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
-
-const LOGIN_URL = "/auth/login";
+import ForgetPassword from "./ForgetPassword";
+import CircularLoader from "./CircularLoader";
 
 export const AuthLogin = () => {
   const theme = useTheme();
-  const {login}=useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
-  const [showPassword, setShowPassword] = React.useState(false);
-
+  const [load, setLoad] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const handleClickShowPassword = () => {
-
-
     setShowPassword(!showPassword);
   };
 
-
   return (
     <>
+      {load && <CircularLoader />}
       <Formik
         initialValues={{
           email: "", // 'admin@silverstay.com',
@@ -50,13 +48,33 @@ export const AuthLogin = () => {
             .required("Email is required"),
           password: Yup.string().max(255).required("Password is required"),
         })}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+        onSubmit={async (values) => {
+          setLoad(true);
           try {
-            await login(values.email,values.password);
-            navigate("/");
-
+            await login(values.email, values.password).then(
+              () => {
+                setLoad(false);
+                navigate("/");
+              },
+              (err) => {
+                console.log(err)
+                const error=err.response?.data?.message || 'Server Error'
+                console.log(error)
+                setLoad(false)
+                setShowError(true);
+                setErrorMessage(error)
+                setTimeout(() => {
+                  setShowError(false);
+                }, 1500);
+              }
+            );
           } catch (err) {
+            setLoad(false);
             console.error(err);
+            setShowError(true);
+            setTimeout(() => {
+              console.log(showError);
+            }, 3000);
             console.log("error");
           }
         }}
@@ -136,16 +154,12 @@ export const AuthLogin = () => {
                 }
                 inputProps={{}}
               />
-              {touched.password && errors.password && (
-                <FormHelperText
-                  error
-                  id="standard-weight-helper-text-password-login"
-                >
-                  {errors.password}
-                </FormHelperText>
-              )}
             </FormControl>
-
+            {showError && (
+              <Alert severity="error" onClose={()=>setShowError(false)}>
+                {errorMessage}
+              </Alert>
+            )}
             <Button
               type="submit"
               disableElevation
@@ -159,9 +173,7 @@ export const AuthLogin = () => {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
+                <ForgetPassword />
               </Grid>
             </Grid>
           </Box>

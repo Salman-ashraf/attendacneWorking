@@ -25,7 +25,7 @@ const EmployeRow = ({ id }) => {
   alignItems="center"
 >
           <EditUser data={employee} />
-          {/* <DeletUser id={employee.id}/> */}
+          <DeletUser id={employee.id}/>
           </Grid>
         </TableCell>
       </TableRow>

@@ -3,7 +3,8 @@ import {
   createEntityAdapter,
   createSlice,
 } from "@reduxjs/toolkit";
-import axios from "../../api/axios";
+import axios from "axios";
+import axiosAuth from "../../api/axios";
 
 const employeeAdapter = createEntityAdapter({
   sortComparer: (a, b) => a.createdAt.localeCompare(b.createdAt),
@@ -17,10 +18,13 @@ export const fetchAllEmployees = createAsyncThunk(
   "employees/fetchAllEmployees",
   async () => {
     try {
-      const res = await axios.get(`/employees`, {});
-      //  console.log(res.data.data);
-      return [...res.data.data];
+      const res = await axiosAuth.get('/employees', {});
+    
+      
+        console.log(res);
+      return [...res.data];
     } catch (error) {
+
       console.log("error occured in fetching users");
       console.log(error);
       throw error;
@@ -30,15 +34,17 @@ export const fetchAllEmployees = createAsyncThunk(
 
 export const addNewEmployee = createAsyncThunk(
   "employees/addNewEmployee",
+
   async (newEmployee) => {
+    console.log(newEmployee);
     try {
-      const res = await axios({
+      const res = await axiosAuth({
         method: "post",
         url: `/employees`,
         data: newEmployee,
       });
-      console.log(res.data.data);
-      return res.data.data;
+      console.log(res);
+      return res.data;
     } catch (error) {
       console.log("error occured in adding users");
       console.log(error);
@@ -51,15 +57,15 @@ export const updateEmployee = createAsyncThunk(
   "employees/updateEmployee",
   async (intialVal) => {
     try {
-      const { name, designation, email, id } = intialVal;
+      const { name, designation, email, id,role } = intialVal;
 
-      const res = await axios({
+      const res = await axiosAuth({
         method: "put",
         url: `/employees/${id}`,
-        data: { name, designation, email },
+        data: { name, designation, email,role },
       });
       console.log(res);
-      return res.data.data;
+      return res.data;
     } catch (error) {
       console.log("error occured in updating users");
       console.log(error);
@@ -74,7 +80,7 @@ export const deleteEmployee = createAsyncThunk(
     try {
       const { id } = intialVal;
       console.log(id);
-      const res = await axios({
+      const res = await axiosAuth({
         method: "delete",
         url: `/employees/${id}`,
       });

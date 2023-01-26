@@ -7,29 +7,45 @@ import {
   DialogActions,
   FormControl,
   FormHelperText,
+  Snackbar,
   TextField,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useTheme } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { updateEmployee } from "./employeeSlice";
 import { alldesgination } from "./allDesignation";
+import CircularLoader from "../../Components/CircularLoader";
+
+const allroles= [
+  {id:1, label: 'Super Admin', value:1234 },
+  {id:2, label: 'Admin', value: 4567 },
+  {id:3, label: 'Standar User', value: 7890 },
+]
+
+
 
 const AddButtonFields = ({ setOpen, props }) => {
-  const [showSuccess, setShowSuccess] = React.useState(false);
-  const [showError, setShowError] = React.useState(false);
+  const [showSuccess, setShowSuccess] =useState(false);
 
+  const [openSnackbar, setOpenSnakbar] =useState(false);
+  const [load,setLoad]=useState(false)
   const dispatch = useDispatch();
-  const theme = useTheme();
+  const theme = useTheme()
+  const roleValue=7890;
+  const defaultRole=allroles.find(item=>item.value==roleValue);
+
   return (
     <>
+      {load && <CircularLoader/>}
       <Formik
         initialValues={{
           fullName: props.data.name,
           email: props.data.email, // 'admin@silverstay.com',
           designation: props.data.designation,
+          role:defaultRole.value,
           submit: null,
         }}
         validationSchema={Yup.object().shape({
@@ -41,28 +57,31 @@ const AddButtonFields = ({ setOpen, props }) => {
             .max(255, "Email must be at most 255 characters")
             .required("Email is required"),
           designation: Yup.string().required("Designation is required"),
+          role: Yup.number().required("Role is required"),
         })}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+        onSubmit={(values) => {
+          setLoad(true)
           dispatch(
             updateEmployee({
               name: values.fullName,
               designation: values.designation,
               email: values.email,
-              id: Number(props.data.id),
+              role:values.role,
+              id:props.data.id,
             })
           )
             .unwrap()
             .then((originalPromiseResult) => {
               setShowSuccess(true);
+              setLoad(false);
+              setOpenSnakbar(true)
               setTimeout(() => {
                 setOpen(false);
-              }, 400);
+              }, 900);
             })
-            .catch((rejectedValueOrSerializedError) => {
-              setShowError(true);
-              setTimeout(() => {
-                setShowError(false);
-              }, 1000);
+            .catch(() => {
+              setLoad(false);
+              setOpenSnakbar(true)
             });
         }}
       >
@@ -132,6 +151,7 @@ const AddButtonFields = ({ setOpen, props }) => {
                   </FormHelperText>
                 )}
               </FormControl>
+            
               <FormControl
                 fullWidth
                 sx={{ ...theme.typography.customInput, mb: 4 }}
@@ -157,15 +177,44 @@ const AddButtonFields = ({ setOpen, props }) => {
                   )}
                 />
               </FormControl>
-              {showSuccess && (
-                <Alert severity="success">
-                  {" "}
-                  Employee updated successfully{" "}
-                </Alert>
-              )}
-              {showError && (
-                <Alert severity="error"> Employee Cannot be updated </Alert>
-              )}
+
+
+              <FormControl
+                fullWidth
+                sx={{ ...theme.typography.customInput, mb: 4 }}
+              >
+                <Autocomplete
+                  fullWidth
+                  // value={values.r}
+                  name="role"
+                  defaultValue={defaultRole}
+                  onBlur={handleBlur}
+                  onChange={(e, newval) => setFieldValue("role", newval.value)}
+                  disablePortal
+                  options={allroles}
+                  isOptionEqualToValue={(option, value) =>
+                    option.id === value.id
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      error={Boolean(touched.role && errors.role)}
+                      variant="standard"
+                      label="Role"
+                    />
+                  )}
+                />
+              </FormControl>
+              <Snackbar
+        open={openSnackbar}
+        autoHideDuration={1400}
+        anchorOrigin={{ vertical:'top', horizontal:'right' }}
+        onClose={()=>setOpenSnakbar(false)}
+        >
+<Alert onClose={()=>setOpenSnakbar(false)} severity={showSuccess?'success':'error'} sx={{ width: '100%' }}>
+   {showSuccess?'Employee updated successfully':'Employee Cannot be updated'}
+  </Alert>
+        </Snackbar>
               <DialogActions>
                 <Button
                   onClick={() => setOpen(false)}

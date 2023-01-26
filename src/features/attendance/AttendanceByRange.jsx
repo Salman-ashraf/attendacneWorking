@@ -8,14 +8,14 @@ import {
 import React, { useEffect } from "react";
 import "react-date-range/dist/styles.css";
 import { DateRangePicker } from "react-date-range";
-import { subDays } from "date-fns";
+import { sub, subDays } from "date-fns";
 import { useState } from "react";
 import "react-date-range/dist/theme/default.css";
 import { Box } from "@mui/system";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import {
-  fetchAllAttandanceBetweenDate,
-  selectAllAttandance,
+  fetchAllAttendanceBetweenDate,
+  selectAllAttendance,
 } from "./attandaceSlice";
 import { useDispatch, useSelector } from "react-redux";
 import RangeAttendancesTable from "./RangeAttendancesTable";
@@ -25,24 +25,35 @@ import {
 } from "../employess/employeeSlice";
 import { getDaysArray, get_productive_hours } from "./usefulFunctions";
 import useAuth from "../../hooks/useAuth";
+import { lastDayOfWeek } from 'date-fns'
+import { startOfWeek } from 'date-fns'
+import { subWeeks } from 'date-fns'
 
- const AttandanceByRange = () => {
+ const AttendanceByRange = () => {
   const {isAdmin,user,loading}=useAuth();
   const [oneEmployee, setOneEmployee] = React.useState("");
   const [range, setRange] = useState([
     {
-      startDate: subDays(new Date(), 8),
-      endDate: subDays(new Date(), 1),
+      startDate: new Date(subWeeks(startOfWeek(new Date()), 1)),
+      endDate: new Date(subDays(startOfWeek(new Date()),1)),
       key: "selection",
     },
   ]);
 
+
+
+
+
   const employees = useSelector(selectAllEmployees);
   const employeesList = employees.map((item) => {
-    return { id: item.id, label: item.name };
+    return { id: item.id, label: item.name};
   });
+ 
 
-  const get_Allattandance = (ar) => {
+
+ 
+
+  const get_Allattendance = (ar) => {
     if (ar) {
       const result = ar
         .map((item) => {
@@ -61,23 +72,22 @@ import useAuth from "../../hooks/useAuth";
 
   useEffect(() => {
     dispatch(
-      fetchAllAttandanceBetweenDate({
+      fetchAllAttendanceBetweenDate({
         fromDate: range[0].startDate,
         toDate: range[0].endDate,
       })
     );
   }, [range]);
 
-  const attendances = useSelector(selectAllAttandance);
-  const allemployees = useSelector(selectEmployeeIds);
-
+  const attendances = useSelector(selectAllAttendance);
+  const allemployees  = useSelector(selectEmployeeIds);
   
   const emplids  = allemployees.filter((item) => {
     if (!isAdmin) return item === user.id;
     return item;
   });
-  //  console.log(allemployees)
 
+    
 
   const employeeList = [];
   for (let i = 0; i < emplids.length; i++) {
@@ -89,12 +99,13 @@ import useAuth from "../../hooks/useAuth";
     employeeList.push({ [emplids[i]]: arr });
   }
 
+
   const daysArray = getDaysArray(range[0].startDate, range[0].endDate);
   const newAttendance = [];
   for (let e = 0; e < employeeList.length; e++) {
     let myar = { employeeId: null, dayHours: [] };
     if (employeeList[e]) {
-      myar.employeeId = Number(Object.keys(employeeList[e]));
+      myar.employeeId = Object.keys(employeeList[e])[0];
       for (let i = 0; i < daysArray.length; i++) {
         const onedayAttendance = employeeList[e][myar.employeeId].filter(
           (item) => {
@@ -106,7 +117,7 @@ import useAuth from "../../hooks/useAuth";
         );
 
         if (onedayAttendance.length > 1) {
-          const biomatricTime = get_Allattandance(onedayAttendance);
+          const biomatricTime = get_Allattendance(onedayAttendance);
           const phours = get_productive_hours(biomatricTime);
           myar.dayHours.push({
             biomatricTime,
@@ -124,6 +135,9 @@ import useAuth from "../../hooks/useAuth";
     }
     newAttendance.push(myar);
   }
+
+
+
 
   const allAttendeces2 = newAttendance.filter((item) => {
     if (oneEmployee) return item.employeeId == oneEmployee.id;
@@ -198,4 +212,4 @@ import useAuth from "../../hooks/useAuth";
   );
 };
 
-export default AttandanceByRange;
+export default AttendanceByRange;

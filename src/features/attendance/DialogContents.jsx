@@ -26,8 +26,7 @@ export default function DialogContents(props) {
   return (
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>
-        Biometric Time of {props.name} on
-        {new Date(props.biometricTime[0].attendanceTime).toLocaleDateString()}
+        Biometric Time of {props.name} on {new Date(props.biometricTime[0].attendanceTime).toLocaleDateString()}
       </DialogTitle>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <TableContainer component={Paper}>
