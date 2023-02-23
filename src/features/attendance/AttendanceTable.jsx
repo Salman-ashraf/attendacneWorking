@@ -178,9 +178,9 @@ export default function AttendanceTable({ date }) {
                                   name={row.name}
                                 /></Box>
                               ) : (
-                                <p>
-                                  <b>Absent</b>
-                                </p>
+                     
+                                     <h4 style={{color:'#9c2222'}}>Absent</h4>
+                           
                               )}
                               </Stack>
                             </TableCell>

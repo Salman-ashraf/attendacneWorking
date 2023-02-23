@@ -9,8 +9,9 @@ const initialState = {
 export const fetchAllAttendanceOfDate = createAsyncThunk(
   "/attandace/fetchAllAttendanceOfDate",
   async ({ date }) => {
+    console.log(date)
     try {
-      const res = await axios.get(`/attendance/getAttendancesByDate`, {
+      const res = await axios.get(`/attendances/employees`, {
         params: {date },
       });
         console.log(res.data.data);
@@ -25,13 +26,13 @@ export const fetchAllAttendanceOfDate = createAsyncThunk(
 
 export const fetchAllAttendanceBetweenDate = createAsyncThunk(
   "attandace/fetchAllAttendanceBetweenDate",
-  async ({ fromDate, toDate }) => {
-    console.log(fromDate)
+  async ({ from, to }) => {
+    console.log(to)
     try {
-      const res = await axios.get(`/attendance/getAttendancesBetweenDates`, {
-        params: { to:toDate ,from:fromDate},
+      const res = await axios.get("/report", {
+        params: {from,to},
       });
-      //console.log(res.data.data);
+      console.log(res);
       return [...res.data.data];
     } catch (error) {
       console.log("error occured in  fetchAllAttendanceBetweenDate");
@@ -40,6 +41,7 @@ export const fetchAllAttendanceBetweenDate = createAsyncThunk(
     }
   }
 );
+
 
 const attendanceSlice = createSlice({
   name: "attandacne",

@@ -43,11 +43,11 @@ export default function DeletUser(props) {
    
    
       <IconButton
-        color="primary"
+      
         aria-label="edit"
         onClick={() => setOpen(true)}
       >
-        <DeleteIcon color="primary" />
+        <DeleteIcon sx={{color:'#b90505;'}}/>
       </IconButton>
       </Tooltip>
       <Dialog

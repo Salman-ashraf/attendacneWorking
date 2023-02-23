@@ -19,6 +19,7 @@ import { updateEmployee } from "./employeeSlice";
 import { alldesgination } from "./allDesignation";
 import CircularLoader from "../../Components/CircularLoader";
 
+
 const allroles= [
   {id:1, label: 'Super Admin', value:1234 },
   {id:2, label: 'Admin', value: 4567 },
@@ -34,9 +35,10 @@ const AddButtonFields = ({ setOpen, props }) => {
   const [load,setLoad]=useState(false)
   const dispatch = useDispatch();
   const theme = useTheme()
-  const roleValue=7890;
-  const defaultRole=allroles.find(item=>item.value==roleValue);
+   console.log(props)
 
+  const defaultRole=allroles.find(item=>item.value==props.data.role,);
+  console.log(defaultRole)
   return (
     <>
       {load && <CircularLoader/>}
@@ -45,7 +47,7 @@ const AddButtonFields = ({ setOpen, props }) => {
           fullName: props.data.name,
           email: props.data.email, // 'admin@silverstay.com',
           designation: props.data.designation,
-          role:defaultRole.value,
+          role:props.data.role,
           submit: null,
         }}
         validationSchema={Yup.object().shape({

@@ -140,9 +140,9 @@ export const JWTProvider = ({ children }) => {
     const response = await axios.post("/employees/mail", {
       email,
     });
-    const { data } = response;
-    console.log(data);
-    return data;
+   
+    console.log(response);
+    return response.data;
   };
 
   const resetPassword = async (email, token, password) => {

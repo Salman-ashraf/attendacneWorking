@@ -26,7 +26,7 @@ const accountReducer = (state = initialState, action) => {
           
             return {
                 ...state,
-             isAdmin:user.role===1234 || user.role===4567 ?true:false,
+             isAdmin:user.role==='1234' || user.role==='4567' ?true:false,
                 // isAdmin:true,
                 isLoggedIn: true,
                 loading:false,

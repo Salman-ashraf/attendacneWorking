@@ -73,8 +73,8 @@ import { subWeeks } from 'date-fns'
   useEffect(() => {
     dispatch(
       fetchAllAttendanceBetweenDate({
-        fromDate: range[0].startDate,
-        toDate: range[0].endDate,
+        from: new Date(range[0].startDate).toISOString(),
+        to:new Date( range[0].endDate).toISOString(),
       })
     );
   }, [range]);
@@ -118,6 +118,7 @@ import { subWeeks } from 'date-fns'
 
         if (onedayAttendance.length > 1) {
           const biomatricTime = get_Allattendance(onedayAttendance);
+      
           const phours = get_productive_hours(biomatricTime);
           myar.dayHours.push({
             biomatricTime,
@@ -135,8 +136,7 @@ import { subWeeks } from 'date-fns'
     }
     newAttendance.push(myar);
   }
-
-
+   
 
 
   const allAttendeces2 = newAttendance.filter((item) => {
@@ -207,6 +207,7 @@ import { subWeeks } from 'date-fns'
           </Box>
         </ClickAwayListener>
       </Container>
+   
       <RangeAttendancesTable days={daysArray} attendances={allAttendeces2} />
     </>
   );

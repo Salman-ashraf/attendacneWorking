@@ -21,8 +21,8 @@ export const fetchAllEmployees = createAsyncThunk(
       const res = await axiosAuth.get('/employees', {});
     
       
-        console.log(res);
-      return [...res.data];
+       // console.log(res);
+      return [...res.data.data];
     } catch (error) {
 
       console.log("error occured in fetching users");
@@ -31,6 +31,7 @@ export const fetchAllEmployees = createAsyncThunk(
     }
   }
 );
+
 
 export const addNewEmployee = createAsyncThunk(
   "employees/addNewEmployee",
@@ -44,7 +45,7 @@ export const addNewEmployee = createAsyncThunk(
         data: newEmployee,
       });
       console.log(res);
-      return res.data;
+      return res.data.data;
     } catch (error) {
       console.log("error occured in adding users");
       console.log(error);
@@ -65,7 +66,7 @@ export const updateEmployee = createAsyncThunk(
         data: { name, designation, email,role },
       });
       console.log(res);
-      return res.data;
+      return res.data.data;
     } catch (error) {
       console.log("error occured in updating users");
       console.log(error);
